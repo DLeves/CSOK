@@ -1,3 +1,5 @@
+# initial setup --------------------------------------------------------------
+
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(tidyverse)
@@ -10,29 +12,20 @@ library(lmtest)
 library(psych)
 library(ppcor)
 
-# df = read.csv("Data/FullDatasetUnpredicted")
+# adat beolvasása, alakítása
 df = read.csv("Data/FullDatasetUnpredicted")
 df$EV = as.factor(df$EV)
 df$JARAS_NEV = as.factor(df$JARAS_NEV)
 # df$MEGYE_SZH = as.factor(df$MEGYE_SZH)
 # df$BALATON = as.factor(df$BALATON)
 
-# cuts = c(-Inf, 1, 70, 85, Inf)
 cuts = c(-Inf, 1, 75, Inf)
-cuts = c(-Inf, 1, 50, Inf)
-# labs = c("nincs", "alacsony","közepes", "magas")
+# cuts = c(-Inf, 1, 50, Inf)
 labs = c("nincs", "alacsony", "magas")
 df$CSOKTREND = cut(df$CSOK, breaks = cuts, labels = labs, include.lowest = T)
 
 rm(cuts, labs)
-# for (i in 1:nrow(df)) {
-#   df$CSOKTREND[i] = "nincs"
-#   if (df$EV[i] >= 2016) {
-#     df$CSOKTREND[i] = "van"
-#   }
-# }
-# 
-# df$CSOKTREND = as.factor(df$CSOKTREND)
+
 #*******************************************************************************************************************************
 # leíró statisztika, korreláció
 #*******************************************************************************************************************************
