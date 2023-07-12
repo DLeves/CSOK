@@ -1,0 +1,259 @@
+---
+title: "CSOK TDK"
+output: 
+  github_document:
+    toc: true
+---
+
+# Kezdő beállítások
+
+## Libraryk
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(plm)
+library(splm)
+library(sp)
+library(spdep)
+library(mgcv)
+library(lmtest)
+library(psych)
+library(ppcor)
+library(lavaan)
+```
+
+## Adatok beolvasása, átalakítása
+```{r read data}
+df = read.csv("Data/ExtendedDataset.csv")
+
+df$EV = as.factor(df$EV)
+df$JARAS_NEV = as.factor(df$JARAS_NEV)
+```
+
+### CSOK dummy meghatározása
+
+Ez a medián a CSOK-os években
+```{r LAKAS median}
+median(df$CSOK[df$EV > "2015"])
+```
+
+A mediánnál elválasztva:
+```{r}
+cuts = c(-Inf, 1, 75, Inf)
+labs = c("nincs", "alacsony", "magas")
+
+df$CSOKTREND = cut(df$CSOK, breaks = cuts, labels = labs, include.lowest = T)
+
+rm(cuts, labs)
+```
+
+### Adatok pótlása GAM-al
+
+```{r GAM model}
+gammodel = gam(LAKAS ~ s(X,Y, by = EV, k = 8), family = "gaussian", data = df, method = "REML")
+
+predicted = predict(gammodel, df)
+df$LAKAS_PRED = df$LAKAS
+
+for (i in 1:nrow(df)) {
+  if(is.na(df$LAKAS[i])){
+    if(predicted[i] > 0){
+      df$LAKAS_PRED[i] = predicted[i]
+    }else{
+      df$LAKAS_PRED[i] = 0
+    }
+  }
+}
+
+rm(i, predicted, gammodel)
+```
+
+# Területi autokorreláció
+
+## Szomszédsági mátrixok
+
+### Adatok felbontása Moranhoz és Gearyhez 
+
+```{r df evenket felbont}
+df2012 = filter(df, EV == 2012)
+df2013 = filter(df, EV == 2013)
+df2014 = filter(df, EV == 2014)
+df2015 = filter(df, EV == 2015)
+df2016 = filter(df, EV == 2016)
+df2017 = filter(df, EV == 2017)
+df2018 = filter(df, EV == 2018)
+df2019 = filter(df, EV == 2019)
+df2020 = filter(df, EV == 2020)
+df2021 = filter(df, EV == 2021)
+```
+
+### Szomszédsági mátrixok létrehozása
+
+```{r szomszedsagi mtx}
+listw32 = nb2listw(dnearneigh(df2016[,c(9,10)], 0, 32, longlat = T))
+listw36 = nb2listw(dnearneigh(df2016[,c(9,10)], 0, 36, longlat = T))
+listw40 = nb2listw(dnearneigh(df2016[,c(9,10)], 0, 40, longlat = T))
+```
+
+## Területi autokorreláció évente
+
+```{r Moran Geary, echo=TRUE, results='hide'}
+# Moran, Geary 2016
+moran(df2016$LAKAS_PRED, listw32, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2016$LAKAS_PRED, listw36, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2016$LAKAS_PRED, listw40, 175, 174, zero.policy = NULL, NAOK = F)
+geary(df2016$LAKAS_PRED, listw32, 175, 174, Szero(listw32))
+geary(df2016$LAKAS_PRED, listw36, 175, 174, Szero(listw36))
+geary(df2016$LAKAS_PRED, listw40, 175, 174, Szero(listw40))
+
+# Moran, Geary 2017
+moran(df2017$LAKAS_PRED, listw32, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2017$LAKAS_PRED, listw36, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2017$LAKAS_PRED, listw40, 175, 174, zero.policy = NULL, NAOK = F)
+geary(df2017$LAKAS_PRED, listw32, 175, 174, Szero(listw32))
+geary(df2017$LAKAS_PRED, listw36, 175, 174, Szero(listw36))
+geary(df2017$LAKAS_PRED, listw40, 175, 174, Szero(listw40))
+
+# Moran, Geary 2018
+moran(df2018$LAKAS_PRED, listw32, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2018$LAKAS_PRED, listw36, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2018$LAKAS_PRED, listw40, 175, 174, zero.policy = NULL, NAOK = F)
+geary(df2018$LAKAS_PRED, listw32, 175, 174, Szero(listw32))
+geary(df2018$LAKAS_PRED, listw36, 175, 174, Szero(listw36))
+geary(df2018$LAKAS_PRED, listw40, 175, 174, Szero(listw40))
+
+# Moran, Geary 2019
+moran(df2019$LAKAS_PRED, listw32, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2019$LAKAS_PRED, listw36, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2019$LAKAS_PRED, listw40, 175, 174, zero.policy = NULL, NAOK = F)
+geary(df2019$LAKAS_PRED, listw32, 175, 174, Szero(listw32))
+geary(df2019$LAKAS_PRED, listw36, 175, 174, Szero(listw36))
+geary(df2019$LAKAS_PRED, listw40, 175, 174, Szero(listw40))
+
+# Moran, Geary 2020
+moran(df2020$LAKAS_PRED, listw32, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2020$LAKAS_PRED, listw36, 175, 174, zero.policy = NULL, NAOK = F)
+moran(df2020$LAKAS_PRED, listw40, 175, 174, zero.policy = NULL, NAOK = F)
+geary(df2020$LAKAS_PRED, listw32, 175, 174, Szero(listw32))
+geary(df2020$LAKAS_PRED, listw36, 175, 174, Szero(listw36))
+geary(df2020$LAKAS_PRED, listw40, 175, 174, Szero(listw40))
+```
+
+# Leíró stat
+
+```{r describe evente, results='hide'}
+describe(df2012$LAKAS)
+describe(df2013$LAKAS)
+describe(df2014$LAKAS)
+describe(df2015$LAKAS)
+describe(df2016$LAKAS)
+describe(df2017$LAKAS)
+describe(df2018$LAKAS)
+describe(df2019$LAKAS)
+describe(df2020$LAKAS)
+describe(df2021$LAKAS)
+```
+
+## Korrelációk
+
+```{r}
+cor(df[,c(4:8,14:18)], use = "complete.obs")
+```
+
+```{r}
+pcor(na.omit(df[,c(4:8,14:18)]))$estimate
+```
+
+# Panelmodell
+
+## Tesztek
+```{r tesztek}
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df, index = c("JARAS_NEV", "EV"))
+
+pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df, index = c("JARAS_NEV", "EV"))
+```
+ 
+## Nemtudom mi legyen a cím itt
+
+```{r nemtom}
+df2 = df %>% arrange(EV) %>% filter(BALATON == 0)
+listw36 = nb2listw(dnearneigh(df2[df2$EV == "2016",c(9,10)], 0, 36, longlat = T), style = "W")
+```
+
+ 
+## Modellek
+Ezeket külön kellene vegyem majd amikor csinálom őket
+```{r modellek}
+
+# regi code
+cuts = c(-Inf, 1, 70, 86, Inf)
+labs = c("nincs", "alacsony","közepes", "magas")
+df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
+
+model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
+cuts = c(-Inf, 1, 75, Inf)
+labs = c("nincs", "alacsony", "magas")
+df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
+
+model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
+model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
+model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
+rm(cuts, labs)
+```
+
+### Summary-k
+
+```{r summaryk}
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model4)
+```
+
+
+### AIC, BIC
+```{r aic bic}
+AIC1 = 2 * (length(model1$coefficients) + 1) - 2 * model1$logLik
+AIC2 = 2 * (length(model2$coefficients) + 1) - 2 * model2$logLik
+AIC3 = 2 * (length(model3$coefficients) + 1) - 2 * model3$logLik
+AIC4 = 2 * (length(model4$coefficients) + 1) - 2 * model4$logLik
+
+BIC1 = -2 * model1$logLik + (length(model1$coefficients)+1)*log(nrow(df))
+BIC2 = -2 * model2$logLik + (length(model2$coefficients)+1)*log(nrow(df))
+BIC3 = -2 * model3$logLik + (length(model3$coefficients)+1)*log(nrow(df))
+BIC4 = -2 * model4$logLik + (length(model4$coefficients)+1)*log(nrow(df))
+
+data.frame(AIC = c(AIC1, AIC2, AIC3, AIC4),
+           BIC = c(BIC1, BIC2, BIC3, BIC4))
+```
+
+
+# SEM
+
+```{r sem, eval=FALSE}
+sem = "
+  # measurement model
+    
+  # regressions
+  
+  # residual correlations
+"
+
+fit = sem(sem, data = df2012)
+summary(fit, standardized = T)
+```
+
