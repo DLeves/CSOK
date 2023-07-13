@@ -20,6 +20,7 @@ library(mgcv)
 library(lmtest)
 library(psych)
 library(ppcor)
+library(corrplot)
 library(lavaan)
 ```
 
@@ -157,73 +158,94 @@ describe(df2021$LAKAS)
 
 ## Korrelációk
 
-```{r}
+```{r corrplot,fig.width=9}
 cor(df[,c(4:8,14:18)], use = "complete.obs")
+corrplot(cor(df[,c(4:8,14:18)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
 ```
 
-```{r}
+```{r parcialis corrplot, fig.width=9}
 pcor(na.omit(df[,c(4:8,14:18)]))$estimate
+corrplot(pcor(na.omit(df[,c(4:8,14:18)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
 ```
 
 # Panelmodell
 
 ## Tesztek
 ```{r tesztek}
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH, df, index = c("JARAS_NEV", "EV"))
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH + BALATON + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
 
-pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df, index = c("JARAS_NEV", "EV"))
+pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
 ```
  
-## Nemtudom mi legyen a cím itt
+## Nem tudom mi legyen a cím itt
 
 ```{r nemtom}
-df2 = df %>% arrange(EV) %>% filter(BALATON == 0)
+df2 = df %>% arrange(EV)
 listw36 = nb2listw(dnearneigh(df2[df2$EV == "2016",c(9,10)], 0, 36, longlat = T), style = "W")
 ```
 
  
 ## Modellek
-Ezeket külön kellene vegyem majd amikor csinálom őket
-```{r modellek}
 
-# regi code
+Az ORVOS és GYORVOS változókat nem tudom beletenni, mert csak 2015-től vannak és azok néhol hiányosan.
+
+#### Modell 1
+
+CSOK dummy: "nincs", "alacsony","közepes", "magas"
+
+```{r model1}
 cuts = c(-Inf, 1, 70, 86, Inf)
 labs = c("nincs", "alacsony","közepes", "magas")
 df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
 
-model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df2,
+model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
+summary(model1)
+```
+
+#### Modell 2
+
+CSOK dummy: "nincs", "alacsony", "magas"
+
+```{r model2}
 cuts = c(-Inf, 1, 75, Inf)
 labs = c("nincs", "alacsony", "magas")
 df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
-
-model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df2,
-              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
-              effect = "individual", spatial.error = "none")
-
-model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK, df2,
-              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
-              effect = "individual", spatial.error = "none")
-
-model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS, df2,
-              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
-              effect = "individual", spatial.error = "none")
-
 rm(cuts, labs)
+
+model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
+summary(model2)
 ```
 
-### Summary-k
+#### Modell 3
 
-```{r summaryk}
-summary(model1)
-summary(model2)
+CSOK számként
+
+```{r model3}
+model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
 summary(model3)
+```
+
+#### Modell 4
+
+CSOK nélkül
+
+```{r model4}
+model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
 summary(model4)
 ```
-
 
 ### AIC, BIC
 ```{r aic bic}

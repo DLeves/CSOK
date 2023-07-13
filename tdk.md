@@ -17,9 +17,8 @@ CSOK TDK
   - [Korrelációk](#korrelációk)
 - [Panelmodell](#panelmodell)
   - [Tesztek](#tesztek)
-  - [Nemtudom mi legyen a cím itt](#nemtudom-mi-legyen-a-cím-itt)
+  - [Nem tudom mi legyen a cím itt](#nem-tudom-mi-legyen-a-cím-itt)
   - [Modellek](#modellek)
-    - [Summary-k](#summary-k)
     - [AIC, BIC](#aic-bic)
 - [SEM](#sem)
 
@@ -39,6 +38,7 @@ library(mgcv)
 library(lmtest)
 library(psych)
 library(ppcor)
+library(corrplot)
 library(lavaan)
 ```
 
@@ -211,6 +211,12 @@ cor(df[,c(4:8,14:18)], use = "complete.obs")
     ## GYORVOS    0.06137758  0.1429740  0.07404506  0.14647215  1.00000000
 
 ``` r
+corrplot(cor(df[,c(4:8,14:18)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+```
+
+![](tdk_files/figure-gfm/corrplot-1.png)<!-- -->
+
+``` r
 pcor(na.omit(df[,c(4:8,14:18)]))$estimate
 ```
 
@@ -237,86 +243,74 @@ pcor(na.omit(df[,c(4:8,14:18)]))$estimate
     ## ORVOS     -0.02383703  0.01314383  0.18663071  1.00000000  0.05429053
     ## GYORVOS   -0.01089151  0.06371884  0.08870950  0.05429053  1.00000000
 
+``` r
+corrplot(pcor(na.omit(df[,c(4:8,14:18)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
+```
+
+![](tdk_files/figure-gfm/parcialis%20corrplot-1.png)<!-- -->
+
 # Panelmodell
 
 ## Tesztek
 
 ``` r
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH + BALATON + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
 ```
 
     ## 
     ##  Hausman Test
     ## 
-    ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH
-    ## chisq = 69.489, df = 5, p-value = 1.309e-13
+    ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH +  ...
+    ## chisq = 52.766, df = 10, p-value = 8.23e-08
     ## alternative hypothesis: one model is inconsistent
 
 ``` r
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
 ```
 
     ## 
     ##  Hausman Test
     ## 
-    ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND
-    ## chisq = 87.633, df = 5, p-value < 2.2e-16
+    ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES +  ...
+    ## chisq = 94.73, df = 10, p-value = 6.147e-16
     ## alternative hypothesis: one model is inconsistent
 
 ``` r
-pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df, index = c("JARAS_NEV", "EV"))
+pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
 ```
 
     ## 
     ##  F test for individual effects
     ## 
-    ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND
-    ## F = 12.544, df1 = 174, df2 = 1570, p-value < 2.2e-16
+    ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES +  ...
+    ## F = 8.638, df1 = 174, df2 = 1024, p-value < 2.2e-16
     ## alternative hypothesis: significant effects
 
-## Nemtudom mi legyen a cím itt
+## Nem tudom mi legyen a cím itt
 
 ``` r
-df2 = df %>% arrange(EV) %>% filter(BALATON == 0)
+df2 = df %>% arrange(EV)
 listw36 = nb2listw(dnearneigh(df2[df2$EV == "2016",c(9,10)], 0, 36, longlat = T), style = "W")
 ```
 
 ## Modellek
 
-Ezeket külön kellene vegyem majd amikor csinálom őket
+Az ORVOS és GYORVOS változókat nem tudom beletenni, mert csak 2015-től
+vannak és azok néhol hiányosan.
+
+#### Modell 1
+
+CSOK dummy: “nincs”, “alacsony”,“közepes”, “magas”
 
 ``` r
-# regi code
 cuts = c(-Inf, 1, 70, 86, Inf)
 labs = c("nincs", "alacsony","közepes", "magas")
 df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
 
-model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df2,
+model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
-cuts = c(-Inf, 1, 75, Inf)
-labs = c("nincs", "alacsony", "magas")
-df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
-
-model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, df2,
-              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
-              effect = "individual", spatial.error = "none")
-
-model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK, df2,
-              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
-              effect = "individual", spatial.error = "none")
-
-model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS, df2,
-              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
-              effect = "individual", spatial.error = "none")
-
-rm(cuts, labs)
-```
-
-### Summary-k
-
-``` r
 summary(model1)
 ```
 
@@ -324,30 +318,47 @@ summary(model1)
     ##  
     ## 
     ## Call:
-    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, 
-    ##     data = df2, index = c("JARAS_NEV", "EV"), listw = listw36, 
-    ##     model = "within", effect = "individual", lag = T, spatial.error = "none")
+    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + 
+    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     "EV"), listw = listw36, model = "within", effect = "individual", 
+    ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -29.57079  -2.47829  -0.13098   2.07284  45.13993 
+    ## -33.67945  -2.80473  -0.13815   2.20214 119.47749 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.425039   0.030721  13.835 < 2.2e-16 ***
+    ## lambda  0.40056    0.03144  12.741 < 2.2e-16 ***
     ## 
     ## Coefficients:
-    ##                     Estimate Std. Error t-value  Pr(>|t|)    
-    ## SZJA               0.0128184  0.0016543  7.7485 9.298e-15 ***
-    ## MUNKA             -0.3501837  0.0749741 -4.6707 3.001e-06 ***
-    ## BERUHAZAS         -0.0052288  0.0011940 -4.3793 1.191e-05 ***
-    ## CSOKTRENDalacsony  1.7720718  0.8653858  2.0477   0.04059 *  
-    ## CSOKTRENDközepes   1.5546326  0.6874166  2.2616   0.02372 *  
-    ## CSOKTRENDmagas     0.0507620  0.6571413  0.0772   0.93843    
+    ##                      Estimate  Std. Error t-value  Pr(>|t|)    
+    ## SZJA               1.2279e-02  1.9711e-03  6.2295 4.679e-10 ***
+    ## MUNKA             -3.5610e-01  1.0107e-01 -3.5232 0.0004264 ***
+    ## BERUHAZAS         -5.5450e-03  1.4025e-03 -3.9536 7.699e-05 ***
+    ## CSOKTRENDalacsony  2.9971e+00  9.9983e-01  2.9976 0.0027214 ** 
+    ## CSOKTRENDközepes   2.0416e+00  8.1476e-01  2.5058 0.0122177 *  
+    ## CSOKTRENDmagas     4.1088e-01  7.7186e-01  0.5323 0.5945057    
+    ## BUNOZES           -7.8009e-05  1.7802e-04 -0.4382 0.6612458    
+    ## SERTETT           -7.8183e-04  4.0711e-04 -1.9204 0.0548012 .  
+    ## PEDAGOGUS          8.6453e-01  4.8008e-01  1.8008 0.0717343 .  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
+#### Modell 2
+
+CSOK dummy: “nincs”, “alacsony”, “magas”
+
 ``` r
+cuts = c(-Inf, 1, 75, Inf)
+labs = c("nincs", "alacsony", "magas")
+df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
+rm(cuts, labs)
+
+model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
 summary(model2)
 ```
 
@@ -355,29 +366,41 @@ summary(model2)
     ##  
     ## 
     ## Call:
-    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND, 
-    ##     data = df2, index = c("JARAS_NEV", "EV"), listw = listw36, 
-    ##     model = "within", effect = "individual", lag = T, spatial.error = "none")
+    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + 
+    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     "EV"), listw = listw36, model = "within", effect = "individual", 
+    ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -29.56834  -2.42710  -0.17835   2.02348  45.27320 
+    ## -33.17314  -2.81092  -0.17748   2.24657 119.74721 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.427861   0.030651  13.959 < 2.2e-16 ***
+    ## lambda 0.402221   0.031405  12.807 < 2.2e-16 ***
     ## 
     ## Coefficients:
-    ##                     Estimate Std. Error t-value  Pr(>|t|)    
-    ## SZJA               0.0132399  0.0016241  8.1523 3.572e-16 ***
-    ## MUNKA             -0.3614834  0.0752768 -4.8021 1.570e-06 ***
-    ## BERUHAZAS         -0.0053522  0.0011953 -4.4779 7.540e-06 ***
-    ## CSOKTRENDalacsony  1.5803465  0.7645856  2.0669   0.03874 *  
-    ## CSOKTRENDmagas     0.5120191  0.6097326  0.8397   0.40105    
+    ##                      Estimate  Std. Error t-value  Pr(>|t|)    
+    ## SZJA               1.2961e-02  1.9455e-03  6.6619 2.703e-11 ***
+    ## MUNKA             -3.6683e-01  1.0144e-01 -3.6161 0.0002991 ***
+    ## BERUHAZAS         -5.7781e-03  1.4042e-03 -4.1148 3.875e-05 ***
+    ## CSOKTRENDalacsony  2.4520e+00  8.9815e-01  2.7300 0.0063332 ** 
+    ## CSOKTRENDmagas     8.0819e-01  7.1966e-01  1.1230 0.2614268    
+    ## BUNOZES           -7.1944e-05  1.7821e-04 -0.4037 0.6864224    
+    ## SERTETT           -7.8790e-04  4.0666e-04 -1.9375 0.0526850 .  
+    ## PEDAGOGUS          8.5219e-01  4.7951e-01  1.7772 0.0755326 .  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
+#### Modell 3
+
+CSOK számként
+
 ``` r
+model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
 summary(model3)
 ```
 
@@ -385,28 +408,40 @@ summary(model3)
     ##  
     ## 
     ## Call:
-    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK, 
-    ##     data = df2, index = c("JARAS_NEV", "EV"), listw = listw36, 
-    ##     model = "within", effect = "individual", lag = T, spatial.error = "none")
+    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + 
+    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     "EV"), listw = listw36, model = "within", effect = "individual", 
+    ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -29.68337  -2.42192  -0.14743   1.95331  45.42790 
+    ## -31.82627  -2.71257  -0.15857   2.13002 119.87841 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.436999   0.030331  14.408 < 2.2e-16 ***
+    ## lambda 0.417891   0.030918  13.516 < 2.2e-16 ***
     ## 
     ## Coefficients:
-    ##             Estimate Std. Error t-value  Pr(>|t|)    
-    ## SZJA       0.0146362  0.0014832  9.8682 < 2.2e-16 ***
-    ## MUNKA     -0.3623438  0.0753657 -4.8078 1.526e-06 ***
-    ## BERUHAZAS -0.0054907  0.0011955 -4.5928 4.372e-06 ***
-    ## CSOK       0.0018729  0.0066855  0.2801    0.7794    
+    ##              Estimate  Std. Error t-value  Pr(>|t|)    
+    ## SZJA       1.5241e-02  1.7603e-03  8.6580 < 2.2e-16 ***
+    ## MUNKA     -3.9105e-01  1.0057e-01 -3.8885 0.0001009 ***
+    ## BERUHAZAS -5.9406e-03  1.4050e-03 -4.2283 2.355e-05 ***
+    ## CSOK       3.2185e-03  7.8850e-03  0.4082 0.6831414    
+    ## BUNOZES   -6.9596e-05  1.7836e-04 -0.3902 0.6963881    
+    ## SERTETT   -8.2918e-04  4.0683e-04 -2.0381 0.0415370 *  
+    ## PEDAGOGUS  6.3947e-01  4.7552e-01  1.3448 0.1786962    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
+#### Modell 4
+
+CSOK nélkül
+
 ``` r
+model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+              listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
+              effect = "individual", spatial.error = "none")
+
 summary(model4)
 ```
 
@@ -414,23 +449,28 @@ summary(model4)
     ##  
     ## 
     ## Call:
-    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS, data = df2, 
-    ##     index = c("JARAS_NEV", "EV"), listw = listw36, model = "within", 
-    ##     effect = "individual", lag = T, spatial.error = "none")
+    ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + 
+    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     "EV"), listw = listw36, model = "within", effect = "individual", 
+    ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -29.68360  -2.40912  -0.12467   1.93846  45.40176 
+    ## -31.82627  -2.71257  -0.15857   2.13002 119.87841 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.437079   0.030328  14.412 < 2.2e-16 ***
+    ## lambda 0.417891   0.030918  13.516 < 2.2e-16 ***
     ## 
     ## Coefficients:
-    ##             Estimate Std. Error t-value  Pr(>|t|)    
-    ## SZJA       0.0146471  0.0014828  9.8783 < 2.2e-16 ***
-    ## MUNKA     -0.3510459  0.0635404 -5.5248 3.299e-08 ***
-    ## BERUHAZAS -0.0055641  0.0011668 -4.7686 1.855e-06 ***
+    ##              Estimate  Std. Error t-value  Pr(>|t|)    
+    ## SZJA       1.5241e-02  1.7603e-03  8.6580 < 2.2e-16 ***
+    ## MUNKA     -3.9105e-01  1.0057e-01 -3.8885 0.0001009 ***
+    ## BERUHAZAS -5.9406e-03  1.4050e-03 -4.2283 2.355e-05 ***
+    ## CSOK       3.2185e-03  7.8850e-03  0.4082 0.6831414    
+    ## BUNOZES   -6.9596e-05  1.7836e-04 -0.3902 0.6963881    
+    ## SERTETT   -8.2918e-04  4.0683e-04 -2.0381 0.0415370 *  
+    ## PEDAGOGUS  6.3947e-01  4.7552e-01  1.3448 0.1786962    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -452,10 +492,10 @@ data.frame(AIC = c(AIC1, AIC2, AIC3, AIC4),
 ```
 
     ##        AIC      BIC
-    ## 1 11046.93 11090.67
-    ## 2 11048.75 11087.02
-    ## 3 11051.44 11084.24
-    ## 4 11049.52 11076.85
+    ## 1 12089.80 12149.94
+    ## 2 12091.34 12146.01
+    ## 3 12097.47 12146.68
+    ## 4 12097.47 12146.68
 
 # SEM
 
