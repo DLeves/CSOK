@@ -1,4 +1,4 @@
-CSOK TDK
+CSOK TDK kód
 ================
 
 - [Kezdő beállítások](#kezdő-beállítások)
@@ -184,7 +184,7 @@ describe(df2021$LAKAS)
 ## Korrelációk
 
 ``` r
-cor(df[,c(4:8,14:18)], use = "complete.obs")
+cor(df[,c(4:8,14:19)], use = "complete.obs")
 ```
 
     ##                 LAKAS       SZJA       MUNKA   BERUHAZAS        CSOK
@@ -198,6 +198,7 @@ cor(df[,c(4:8,14:18)], use = "complete.obs")
     ## PEDAGOGUS  0.23637629  0.1830092  0.07755174  0.16020173 -0.07238756
     ## ORVOS     -0.33984858 -0.3451780 -0.30159493 -0.10513064  0.17688275
     ## GYORVOS   -0.08994859 -0.1652809 -0.12108496 -0.05896689  0.02580778
+    ## ATLAGAR    0.69680891  0.7430468  0.55728901  0.38713991  0.01480768
     ##               BUNOZES    SERTETT   PEDAGOGUS       ORVOS     GYORVOS
     ## LAKAS     -0.05715594 -0.1451994  0.23637629 -0.33984858 -0.08994859
     ## SZJA      -0.25203211 -0.4786846  0.18300918 -0.34517798 -0.16528087
@@ -209,42 +210,69 @@ cor(df[,c(4:8,14:18)], use = "complete.obs")
     ## PEDAGOGUS  0.03582450  0.1006210  1.00000000  0.06395328  0.07404506
     ## ORVOS      0.05974800  0.1728865  0.06395328  1.00000000  0.14647215
     ## GYORVOS    0.06137758  0.1429740  0.07404506  0.14647215  1.00000000
+    ## ATLAGAR   -0.10765804 -0.2622687  0.27325799 -0.45604068 -0.15125215
+    ##               ATLAGAR
+    ## LAKAS      0.69680891
+    ## SZJA       0.74304678
+    ## MUNKA      0.55728901
+    ## BERUHAZAS  0.38713991
+    ## CSOK       0.01480768
+    ## BUNOZES   -0.10765804
+    ## SERTETT   -0.26226871
+    ## PEDAGOGUS  0.27325799
+    ## ORVOS     -0.45604068
+    ## GYORVOS   -0.15125215
+    ## ATLAGAR    1.00000000
 
 ``` r
-corrplot(cor(df[,c(4:8,14:18)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+corrplot(cor(df[,c(4:8,14:19)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
 ```
 
 ![](tdk_files/figure-gfm/corrplot-1.png)<!-- -->
 
 ``` r
-pcor(na.omit(df[,c(4:8,14:18)]))$estimate
+pcor(na.omit(df[,c(4:8,14:19)]))$estimate
 ```
 
-    ##                 LAKAS        SZJA       MUNKA   BERUHAZAS        CSOK
-    ## LAKAS      1.00000000  0.22025976  0.08802404 -0.09499849  0.03305034
-    ## SZJA       0.22025976  1.00000000  0.47049588  0.45316455  0.08470265
-    ## MUNKA      0.08802404  0.47049588  1.00000000  0.14035111  0.10061307
-    ## BERUHAZAS -0.09499849  0.45316455  0.14035111  1.00000000 -0.05821834
-    ## CSOK       0.03305034  0.08470265  0.10061307 -0.05821834  1.00000000
-    ## BUNOZES    0.01022799  0.01193103  0.02967921 -0.07237939  0.02450377
-    ## SERTETT    0.06318258 -0.16331058 -0.23568456  0.05667894 -0.09959544
-    ## PEDAGOGUS  0.20774436  0.16307579 -0.04414352  0.04345751 -0.11772744
-    ## ORVOS     -0.22511388 -0.20471854 -0.08253315  0.15015208  0.27510267
-    ## GYORVOS   -0.01993593 -0.10523180  0.02824298  0.04381977  0.05169498
-    ##               BUNOZES     SERTETT   PEDAGOGUS       ORVOS     GYORVOS
-    ## LAKAS      0.01022799  0.06318258  0.20774436 -0.22511388 -0.01993593
-    ## SZJA       0.01193103 -0.16331058  0.16307579 -0.20471854 -0.10523180
-    ## MUNKA      0.02967921 -0.23568456 -0.04414352 -0.08253315  0.02824298
-    ## BERUHAZAS -0.07237939  0.05667894  0.04345751  0.15015208  0.04381977
-    ## CSOK       0.02450377 -0.09959544 -0.11772744  0.27510267  0.05169498
-    ## BUNOZES    1.00000000  0.47190644 -0.01245317 -0.02383703 -0.01089151
-    ## SERTETT    0.47190644  1.00000000  0.14876944  0.01314383  0.06371884
-    ## PEDAGOGUS -0.01245317  0.14876944  1.00000000  0.18663071  0.08870950
-    ## ORVOS     -0.02383703  0.01314383  0.18663071  1.00000000  0.05429053
-    ## GYORVOS   -0.01089151  0.06371884  0.08870950  0.05429053  1.00000000
+    ##                  LAKAS         SZJA       MUNKA    BERUHAZAS        CSOK
+    ## LAKAS      1.000000000 -0.141305719  0.08054721 -0.002347232  0.06527680
+    ## SZJA      -0.141305719  1.000000000  0.40263633  0.452815592  0.10827029
+    ## MUNKA      0.080547215  0.402636328  1.00000000  0.137211519  0.09949717
+    ## BERUHAZAS -0.002347232  0.452815592  0.13721152  1.000000000 -0.06709262
+    ## CSOK       0.065276796  0.108270293  0.09949717 -0.067092623  1.00000000
+    ## BUNOZES   -0.011578544 -0.009818031  0.03012111 -0.066512071  0.02695475
+    ## SERTETT    0.015567480 -0.173721241 -0.23426654  0.065437692 -0.09446884
+    ## PEDAGOGUS  0.083556225  0.048688336 -0.04153938  0.064821125 -0.10489165
+    ## ORVOS     -0.061201382 -0.047247105 -0.08326690  0.113857941  0.25217900
+    ## GYORVOS    0.001476325 -0.070593660  0.02780678  0.038759870  0.04926800
+    ## ATLAGAR    0.548133710  0.540551842 -0.01264402 -0.139262319 -0.06877748
+    ##                BUNOZES     SERTETT   PEDAGOGUS       ORVOS      GYORVOS
+    ## LAKAS     -0.011578544  0.01556748  0.08355623 -0.06120138  0.001476325
+    ## SZJA      -0.009818031 -0.17372124  0.04868834 -0.04724711 -0.070593660
+    ## MUNKA      0.030121108 -0.23426654 -0.04153938 -0.08326690  0.027806780
+    ## BERUHAZAS -0.066512071  0.06543769  0.06482112  0.11385794  0.038759870
+    ## CSOK       0.026954752 -0.09446884 -0.10489165  0.25217900  0.049268004
+    ## BUNOZES    1.000000000  0.46801433 -0.01817523 -0.01502497 -0.009662893
+    ## SERTETT    0.468014330  1.00000000  0.13562781  0.02791154  0.065780969
+    ## PEDAGOGUS -0.018175229  0.13562781  1.00000000  0.21537565  0.092822572
+    ## ORVOS     -0.015024972  0.02791154  0.21537565  1.00000000  0.045505643
+    ## GYORVOS   -0.009662893  0.06578097  0.09282257  0.04550564  1.000000000
+    ## ATLAGAR    0.036719814  0.06778690  0.16044999 -0.22318048 -0.033096695
+    ##               ATLAGAR
+    ## LAKAS      0.54813371
+    ## SZJA       0.54055184
+    ## MUNKA     -0.01264402
+    ## BERUHAZAS -0.13926232
+    ## CSOK      -0.06877748
+    ## BUNOZES    0.03671981
+    ## SERTETT    0.06778690
+    ## PEDAGOGUS  0.16044999
+    ## ORVOS     -0.22318048
+    ## GYORVOS   -0.03309669
+    ## ATLAGAR    1.00000000
 
 ``` r
-corrplot(pcor(na.omit(df[,c(4:8,14:18)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
+corrplot(pcor(na.omit(df[,c(4:8,14:19)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
 ```
 
 ![](tdk_files/figure-gfm/parcialis%20corrplot-1.png)<!-- -->
@@ -254,36 +282,36 @@ corrplot(pcor(na.omit(df[,c(4:8,14:18)]))$estimate, method = "color", addCoef.co
 ## Tesztek
 
 ``` r
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH + BALATON + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH + BALATON + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS + ATLAGAR, df, index = c("JARAS_NEV", "EV"))
 ```
 
     ## 
     ##  Hausman Test
     ## 
     ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH +  ...
-    ## chisq = 52.766, df = 10, p-value = 8.23e-08
+    ## chisq = 21.873, df = 11, p-value = 0.02538
     ## alternative hypothesis: one model is inconsistent
 
 ``` r
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS + ATLAGAR, df, index = c("JARAS_NEV", "EV"))
 ```
 
     ## 
     ##  Hausman Test
     ## 
     ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES +  ...
-    ## chisq = 94.73, df = 10, p-value = 6.147e-16
+    ## chisq = 33.222, df = 11, p-value = 0.0004842
     ## alternative hypothesis: one model is inconsistent
 
 ``` r
-pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
+pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS + ATLAGAR, df, index = c("JARAS_NEV", "EV"))
 ```
 
     ## 
     ##  F test for individual effects
     ## 
     ## data:  LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES +  ...
-    ## F = 8.638, df1 = 174, df2 = 1024, p-value < 2.2e-16
+    ## F = 5.2639, df1 = 174, df2 = 1023, p-value < 2.2e-16
     ## alternative hypothesis: significant effects
 
 ## Nem tudom mi legyen a cím itt
@@ -307,7 +335,7 @@ cuts = c(-Inf, 1, 70, 86, Inf)
 labs = c("nincs", "alacsony","közepes", "magas")
 df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
 
-model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -319,29 +347,30 @@ summary(model1)
     ## 
     ## Call:
     ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + 
-    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, data = df2, index = c("JARAS_NEV", 
     ##     "EV"), listw = listw36, model = "within", effect = "individual", 
     ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -33.67945  -2.80473  -0.13815   2.20214 119.47749 
+    ## -42.03430  -2.26730  -0.28721   1.84919 115.25958 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda  0.40056    0.03144  12.741 < 2.2e-16 ***
+    ## lambda 0.350435   0.031668  11.066 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##                      Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA               1.2279e-02  1.9711e-03  6.2295 4.679e-10 ***
-    ## MUNKA             -3.5610e-01  1.0107e-01 -3.5232 0.0004264 ***
-    ## BERUHAZAS         -5.5450e-03  1.4025e-03 -3.9536 7.699e-05 ***
-    ## CSOKTRENDalacsony  2.9971e+00  9.9983e-01  2.9976 0.0027214 ** 
-    ## CSOKTRENDközepes   2.0416e+00  8.1476e-01  2.5058 0.0122177 *  
-    ## CSOKTRENDmagas     4.1088e-01  7.7186e-01  0.5323 0.5945057    
-    ## BUNOZES           -7.8009e-05  1.7802e-04 -0.4382 0.6612458    
-    ## SERTETT           -7.8183e-04  4.0711e-04 -1.9204 0.0548012 .  
-    ## PEDAGOGUS          8.6453e-01  4.8008e-01  1.8008 0.0717343 .  
+    ## SZJA              -4.6545e-03  2.2944e-03 -2.0287 0.0424931 *  
+    ## MUNKA             -2.5353e-02  1.0019e-01 -0.2530 0.8002302    
+    ## BERUHAZAS         -4.4823e-03  1.3487e-03 -3.3233 0.0008896 ***
+    ## CSOKTRENDalacsony  2.5702e+00  9.6050e-01  2.6759 0.0074527 ** 
+    ## CSOKTRENDközepes   3.0838e+00  7.8813e-01  3.9128 9.124e-05 ***
+    ## CSOKTRENDmagas     8.0434e-01  7.4258e-01  1.0832 0.2787350    
+    ## BUNOZES           -7.4323e-05  1.7104e-04 -0.4345 0.6639042    
+    ## SERTETT           -6.6471e-04  3.9130e-04 -1.6987 0.0893734 .  
+    ## PEDAGOGUS          4.8527e-01  4.6228e-01  1.0497 0.2938443    
+    ## ATLAGAR            1.0684e+00  8.6477e-02 12.3551 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -355,7 +384,7 @@ labs = c("nincs", "alacsony", "magas")
 df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
 rm(cuts, labs)
 
-model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -367,28 +396,29 @@ summary(model2)
     ## 
     ## Call:
     ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + 
-    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, data = df2, index = c("JARAS_NEV", 
     ##     "EV"), listw = listw36, model = "within", effect = "individual", 
     ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -33.17314  -2.81092  -0.17748   2.24657 119.74721 
+    ## -41.83609  -2.21652  -0.32581   1.73821 115.18953 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.402221   0.031405  12.807 < 2.2e-16 ***
+    ## lambda 0.356005   0.031582  11.273 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##                      Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA               1.2961e-02  1.9455e-03  6.6619 2.703e-11 ***
-    ## MUNKA             -3.6683e-01  1.0144e-01 -3.6161 0.0002991 ***
-    ## BERUHAZAS         -5.7781e-03  1.4042e-03 -4.1148 3.875e-05 ***
-    ## CSOKTRENDalacsony  2.4520e+00  8.9815e-01  2.7300 0.0063332 ** 
-    ## CSOKTRENDmagas     8.0819e-01  7.1966e-01  1.1230 0.2614268    
-    ## BUNOZES           -7.1944e-05  1.7821e-04 -0.4037 0.6864224    
-    ## SERTETT           -7.8790e-04  4.0666e-04 -1.9375 0.0526850 .  
-    ## PEDAGOGUS          8.5219e-01  4.7951e-01  1.7772 0.0755326 .  
+    ## SZJA              -3.7543e-03  2.2732e-03 -1.6516 0.0986210 .  
+    ## MUNKA             -6.4351e-02  1.0013e-01 -0.6427 0.5204302    
+    ## BERUHAZAS         -4.5852e-03  1.3524e-03 -3.3903 0.0006982 ***
+    ## CSOKTRENDalacsony  2.6641e+00  8.6434e-01  3.0823 0.0020543 ** 
+    ## CSOKTRENDmagas     1.5761e+00  6.9588e-01  2.2649 0.0235194 *  
+    ## BUNOZES           -6.9834e-05  1.7141e-04 -0.4074 0.6837026    
+    ## SERTETT           -7.2464e-04  3.9121e-04 -1.8523 0.0639846 .  
+    ## PEDAGOGUS          3.8896e-01  4.6280e-01  0.8404 0.4006587    
+    ## ATLAGAR            1.0385e+00  8.5643e-02 12.1263 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -397,7 +427,7 @@ summary(model2)
 CSOK számként
 
 ``` r
-model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -409,27 +439,28 @@ summary(model3)
     ## 
     ## Call:
     ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + 
-    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, data = df2, index = c("JARAS_NEV", 
     ##     "EV"), listw = listw36, model = "within", effect = "individual", 
     ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -31.82627  -2.71257  -0.15857   2.13002 119.87841 
+    ## -42.57811  -2.16945  -0.27426   1.72630 115.31856 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.417891   0.030918  13.516 < 2.2e-16 ***
+    ## lambda  0.36908    0.03115  11.848 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##              Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA       1.5241e-02  1.7603e-03  8.6580 < 2.2e-16 ***
-    ## MUNKA     -3.9105e-01  1.0057e-01 -3.8885 0.0001009 ***
-    ## BERUHAZAS -5.9406e-03  1.4050e-03 -4.2283 2.355e-05 ***
-    ## CSOK       3.2185e-03  7.8850e-03  0.4082 0.6831414    
-    ## BUNOZES   -6.9596e-05  1.7836e-04 -0.3902 0.6963881    
-    ## SERTETT   -8.2918e-04  4.0683e-04 -2.0381 0.0415370 *  
-    ## PEDAGOGUS  6.3947e-01  4.7552e-01  1.3448 0.1786962    
+    ## SZJA      -2.0915e-03  2.1490e-03 -0.9733 0.3304234    
+    ## MUNKA     -9.2495e-02  9.9275e-02 -0.9317 0.3514890    
+    ## BERUHAZAS -4.6189e-03  1.3534e-03 -3.4129 0.0006429 ***
+    ## CSOK       1.5048e-02  7.6525e-03  1.9663 0.0492593 *  
+    ## BUNOZES   -6.9934e-05  1.7150e-04 -0.4078 0.6834375    
+    ## SERTETT   -7.4940e-04  3.9128e-04 -1.9153 0.0554592 .  
+    ## PEDAGOGUS  2.3010e-01  4.5840e-01  0.5020 0.6156893    
+    ## ATLAGAR    1.0503e+00  8.5953e-02 12.2197 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -438,7 +469,7 @@ summary(model3)
 CSOK nélkül
 
 ``` r
-model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -450,52 +481,52 @@ summary(model4)
     ## 
     ## Call:
     ## spml(formula = LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + 
-    ##     BUNOZES + SERTETT + PEDAGOGUS, data = df2, index = c("JARAS_NEV", 
+    ##     BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, data = df2, index = c("JARAS_NEV", 
     ##     "EV"), listw = listw36, model = "within", effect = "individual", 
     ##     lag = T, spatial.error = "none")
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -31.82627  -2.71257  -0.15857   2.13002 119.87841 
+    ## -42.57811  -2.16945  -0.27426   1.72630 115.31856 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.417891   0.030918  13.516 < 2.2e-16 ***
+    ## lambda  0.36908    0.03115  11.848 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##              Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA       1.5241e-02  1.7603e-03  8.6580 < 2.2e-16 ***
-    ## MUNKA     -3.9105e-01  1.0057e-01 -3.8885 0.0001009 ***
-    ## BERUHAZAS -5.9406e-03  1.4050e-03 -4.2283 2.355e-05 ***
-    ## CSOK       3.2185e-03  7.8850e-03  0.4082 0.6831414    
-    ## BUNOZES   -6.9596e-05  1.7836e-04 -0.3902 0.6963881    
-    ## SERTETT   -8.2918e-04  4.0683e-04 -2.0381 0.0415370 *  
-    ## PEDAGOGUS  6.3947e-01  4.7552e-01  1.3448 0.1786962    
+    ## SZJA      -2.0915e-03  2.1490e-03 -0.9733 0.3304234    
+    ## MUNKA     -9.2495e-02  9.9275e-02 -0.9317 0.3514890    
+    ## BERUHAZAS -4.6189e-03  1.3534e-03 -3.4129 0.0006429 ***
+    ## CSOK       1.5048e-02  7.6525e-03  1.9663 0.0492593 *  
+    ## BUNOZES   -6.9934e-05  1.7150e-04 -0.4078 0.6834375    
+    ## SERTETT   -7.4940e-04  3.9128e-04 -1.9153 0.0554592 .  
+    ## PEDAGOGUS  2.3010e-01  4.5840e-01  0.5020 0.6156893    
+    ## ATLAGAR    1.0503e+00  8.5953e-02 12.2197 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ### AIC, BIC
 
 ``` r
-AIC1 = 2 * (length(model1$coefficients) + 1) - 2 * model1$logLik
-AIC2 = 2 * (length(model2$coefficients) + 1) - 2 * model2$logLik
-AIC3 = 2 * (length(model3$coefficients) + 1) - 2 * model3$logLik
-AIC4 = 2 * (length(model4$coefficients) + 1) - 2 * model4$logLik
+paic = function(model){
+  return(2 * (length(model$coefficients) + 1) - 2 * model$logLik)
+}
 
-BIC1 = -2 * model1$logLik + (length(model1$coefficients)+1)*log(nrow(df))
-BIC2 = -2 * model2$logLik + (length(model2$coefficients)+1)*log(nrow(df))
-BIC3 = -2 * model3$logLik + (length(model3$coefficients)+1)*log(nrow(df))
-BIC4 = -2 * model4$logLik + (length(model4$coefficients)+1)*log(nrow(df))
+pbic = function(model){
+ return(-2 * model$logLik + (length(model$coefficients)+1)*log(nrow(model$model)))
+}
 
-data.frame(AIC = c(AIC1, AIC2, AIC3, AIC4),
-           BIC = c(BIC1, BIC2, BIC3, BIC4))
+#valamiert nem mukodik a lapply, sapply... -val :/
+data.frame(AIC = c(paic(model1), paic(model2), paic(model3), paic(model4)) ,
+           BIC = c(pbic(model1), pbic(model2), pbic(model3), pbic(model4)))
 ```
 
     ##        AIC      BIC
-    ## 1 12089.80 12149.94
-    ## 2 12091.34 12146.01
-    ## 3 12097.47 12146.68
-    ## 4 12097.47 12146.68
+    ## 1 11938.25 12003.86
+    ## 2 11944.55 12004.70
+    ## 3 11948.18 12002.85
+    ## 4 11948.18 12002.85
 
 # SEM
 

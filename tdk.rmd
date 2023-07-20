@@ -158,24 +158,24 @@ describe(df2021$LAKAS)
 
 ## Korrelációk
 
-```{r corrplot,fig.width=9}
-cor(df[,c(4:8,14:18)], use = "complete.obs")
-corrplot(cor(df[,c(4:8,14:18)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+```{r corrplot,fig.width=10}
+cor(df[,c(4:8,14:19)], use = "complete.obs")
+corrplot(cor(df[,c(4:8,14:19)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
 ```
 
-```{r parcialis corrplot, fig.width=9}
-pcor(na.omit(df[,c(4:8,14:18)]))$estimate
-corrplot(pcor(na.omit(df[,c(4:8,14:18)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
+```{r parcialis corrplot, fig.width=10}
+pcor(na.omit(df[,c(4:8,14:19)]))$estimate
+corrplot(pcor(na.omit(df[,c(4:8,14:19)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
 ```
 
 # Panelmodell
 
 ## Tesztek
 ```{r tesztek}
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH + BALATON + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
-phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + MEGYE_SZH + BALATON + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS + ATLAGAR, df, index = c("JARAS_NEV", "EV"))
+phtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS + ATLAGAR, df, index = c("JARAS_NEV", "EV"))
 
-pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS, df, index = c("JARAS_NEV", "EV"))
+pFtest(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ORVOS + GYORVOS + ATLAGAR, df, index = c("JARAS_NEV", "EV"))
 ```
  
 ## Nem tudom mi legyen a cím itt
@@ -199,7 +199,7 @@ cuts = c(-Inf, 1, 70, 86, Inf)
 labs = c("nincs", "alacsony","közepes", "magas")
 df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
 
-model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model1 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -216,7 +216,7 @@ labs = c("nincs", "alacsony", "magas")
 df2$CSOKTREND = cut(df2$CSOK, breaks = cuts, labels = labs, include.lowest = T)
 rm(cuts, labs)
 
-model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model2 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOKTREND + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -228,7 +228,7 @@ summary(model2)
 CSOK számként
 
 ```{r model3}
-model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model3 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -240,7 +240,7 @@ summary(model3)
 CSOK nélkül
 
 ```{r model4}
-model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS, df2,
+model4 = spml(LAKAS_PRED ~ SZJA + MUNKA + BERUHAZAS + CSOK + BUNOZES + SERTETT + PEDAGOGUS + ATLAGAR, df2,
               listw = listw36, model = "within", index = c("JARAS_NEV", "EV"), lag = T,
               effect = "individual", spatial.error = "none")
 
@@ -249,18 +249,18 @@ summary(model4)
 
 ### AIC, BIC
 ```{r aic bic}
-AIC1 = 2 * (length(model1$coefficients) + 1) - 2 * model1$logLik
-AIC2 = 2 * (length(model2$coefficients) + 1) - 2 * model2$logLik
-AIC3 = 2 * (length(model3$coefficients) + 1) - 2 * model3$logLik
-AIC4 = 2 * (length(model4$coefficients) + 1) - 2 * model4$logLik
 
-BIC1 = -2 * model1$logLik + (length(model1$coefficients)+1)*log(nrow(df))
-BIC2 = -2 * model2$logLik + (length(model2$coefficients)+1)*log(nrow(df))
-BIC3 = -2 * model3$logLik + (length(model3$coefficients)+1)*log(nrow(df))
-BIC4 = -2 * model4$logLik + (length(model4$coefficients)+1)*log(nrow(df))
+paic = function(model){
+  return(2 * (length(model$coefficients) + 1) - 2 * model$logLik)
+}
 
-data.frame(AIC = c(AIC1, AIC2, AIC3, AIC4),
-           BIC = c(BIC1, BIC2, BIC3, BIC4))
+pbic = function(model){
+ return(-2 * model$logLik + (length(model$coefficients)+1)*log(nrow(model$model)))
+}
+
+#valamiert nem mukodik a lapply, sapply... -val :/
+data.frame(AIC = c(paic(model1), paic(model2), paic(model3), paic(model4)) ,
+           BIC = c(pbic(model1), pbic(model2), pbic(model3), pbic(model4)))
 ```
 
 
