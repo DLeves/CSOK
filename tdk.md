@@ -1,4 +1,4 @@
-CSOK TDK kód
+CSOK TDK
 ================
 
 - [Kezdő beállítások](#kezdő-beállítások)
@@ -46,9 +46,6 @@ library(lavaan)
 
 ``` r
 df = read.csv("Data/ExtendedDataset.csv")
-
-df$EV = as.factor(df$EV)
-df$JARAS_NEV = as.factor(df$JARAS_NEV)
 ```
 
 ### CSOK dummy meghatározása
@@ -59,9 +56,12 @@ Ez a medián a CSOK-os években
 median(df$CSOK[df$EV > "2015"])
 ```
 
-    ## Warning in Ops.factor(df$EV, "2015"): '>' not meaningful for factors
+    ## [1] 74
 
-    ## [1] NA
+``` r
+df$JARAS_NEV = as.factor(df$JARAS_NEV)
+df$EV = as.factor(df$EV)
+```
 
 A mediánnál elválasztva:
 
@@ -225,10 +225,16 @@ cor(df[,c(4:8,14:19)], use = "complete.obs")
     ## ATLAGAR    1.00000000
 
 ``` r
-corrplot(cor(df[,c(4:8,14:19)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color")
 ```
 
 ![](tdk_files/figure-gfm/corrplot-1.png)<!-- -->
+
+``` r
+corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+```
+
+![](tdk_files/figure-gfm/corrplot-2.png)<!-- -->
 
 ``` r
 pcor(na.omit(df[,c(4:8,14:19)]))$estimate
@@ -272,10 +278,18 @@ pcor(na.omit(df[,c(4:8,14:19)]))$estimate
     ## ATLAGAR    1.00000000
 
 ``` r
-corrplot(pcor(na.omit(df[,c(4:8,14:19)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
+corrplot(pcor(na.omit(df[,c(4:8,14:37)]))$estimate, method = "color")
 ```
 
+    ## Warning in pcor(na.omit(df[, c(4:8, 14:37)])): The inverse of
+    ## variance-covariance matrix is calculated using Moore-Penrose generalized matrix
+    ## invers due to its determinant of zero.
+
 ![](tdk_files/figure-gfm/parcialis%20corrplot-1.png)<!-- -->
+
+``` r
+# corrplot(pcor(na.omit(df[,c(4:8,14:19)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
+```
 
 # Panelmodell
 

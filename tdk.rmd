@@ -27,9 +27,6 @@ library(lavaan)
 ## Adatok beolvasása, átalakítása
 ```{r read data}
 df = read.csv("Data/ExtendedDataset.csv")
-
-df$EV = as.factor(df$EV)
-df$JARAS_NEV = as.factor(df$JARAS_NEV)
 ```
 
 ### CSOK dummy meghatározása
@@ -37,6 +34,9 @@ df$JARAS_NEV = as.factor(df$JARAS_NEV)
 Ez a medián a CSOK-os években
 ```{r LAKAS median}
 median(df$CSOK[df$EV > "2015"])
+
+df$JARAS_NEV = as.factor(df$JARAS_NEV)
+df$EV = as.factor(df$EV)
 ```
 
 A mediánnál elválasztva:
@@ -158,14 +158,16 @@ describe(df2021$LAKAS)
 
 ## Korrelációk
 
-```{r corrplot,fig.width=10}
+```{r corrplot, fig.width=15, fig.height=15}
 cor(df[,c(4:8,14:19)], use = "complete.obs")
-corrplot(cor(df[,c(4:8,14:19)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color")
+corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
 ```
 
-```{r parcialis corrplot, fig.width=10}
+```{r parcialis corrplot}
 pcor(na.omit(df[,c(4:8,14:19)]))$estimate
-corrplot(pcor(na.omit(df[,c(4:8,14:19)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
+corrplot(pcor(na.omit(df[,c(4:8,14:37)]))$estimate, method = "color")
+# corrplot(pcor(na.omit(df[,c(4:8,14:19)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
 ```
 
 # Panelmodell
