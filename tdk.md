@@ -76,6 +76,8 @@ rm(cuts, labs)
 
 ### Adatok pótlása GAM-al
 
+#### Lakás GAM modell
+
 ``` r
 gammodel = gam(LAKAS ~ s(X,Y, by = EV, k = 8), family = "gaussian", data = df, method = "REML")
 
@@ -94,6 +96,28 @@ for (i in 1:nrow(df)) {
 
 rm(i, predicted, gammodel)
 ```
+
+#### Eü adatok GAM modelljei
+
+VEDONO + HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM +
+HO_APOLO_SZAM + HGYO_SZAM
+
+``` r
+sapply(df[,20:37], function(x) sum(is.na(x)))
+```
+
+    ##              HO_SZAM            HGYO_SZAM        HO_APOLO_SZAM 
+    ##                    1                   50                    1 
+    ##        HO_SZOLG_SZAM      HGYO_SZOLG_SZAM       FHO_SZOLG_SZAM 
+    ##                    1                   42                   41 
+    ##     FGYHO_SZOLG_SZAM   HO_HELY_SZOLG_SZAM HGYO_HELY_SZOLG_SZAM 
+    ##                   52                  447                 1160 
+    ##         HO_TMED_SZAM      HGYO_TMED_SZAMA         HO_FORG_OSSZ 
+    ##                 1575                 1582                    1 
+    ##       HGYO_FORG_OSSZ         HGYO_FORG_RB         HGYO_FORG_RK 
+    ##                   42                   42                   58 
+    ##           HO_FORG_RB           HO_FORG_RK               VEDONO 
+    ##                    1                    1                    1
 
 # Területi autokorreláció
 
@@ -367,24 +391,24 @@ summary(model1)
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -42.03430  -2.26730  -0.28721   1.84919 115.25958 
+    ## -42.02227  -2.26348  -0.29101   1.84223 115.24878 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.350435   0.031668  11.066 < 2.2e-16 ***
+    ## lambda 0.351480   0.031614  11.118 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##                      Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA              -4.6545e-03  2.2944e-03 -2.0287 0.0424931 *  
-    ## MUNKA             -2.5353e-02  1.0019e-01 -0.2530 0.8002302    
-    ## BERUHAZAS         -4.4823e-03  1.3487e-03 -3.3233 0.0008896 ***
-    ## CSOKTRENDalacsony  2.5702e+00  9.6050e-01  2.6759 0.0074527 ** 
-    ## CSOKTRENDközepes   3.0838e+00  7.8813e-01  3.9128 9.124e-05 ***
-    ## CSOKTRENDmagas     8.0434e-01  7.4258e-01  1.0832 0.2787350    
-    ## BUNOZES           -7.4323e-05  1.7104e-04 -0.4345 0.6639042    
-    ## SERTETT           -6.6471e-04  3.9130e-04 -1.6987 0.0893734 .  
-    ## PEDAGOGUS          4.8527e-01  4.6228e-01  1.0497 0.2938443    
-    ## ATLAGAR            1.0684e+00  8.6477e-02 12.3551 < 2.2e-16 ***
+    ## SZJA              -4.7023e-03  2.2938e-03 -2.0500 0.0403672 *  
+    ## MUNKA             -2.2844e-02  1.0017e-01 -0.2280 0.8196084    
+    ## BERUHAZAS         -4.4759e-03  1.3480e-03 -3.3205 0.0008986 ***
+    ## CSOKTRENDalacsony  2.5704e+00  9.5966e-01  2.6785 0.0073957 ** 
+    ## CSOKTRENDközepes   3.0819e+00  7.8760e-01  3.9131 9.114e-05 ***
+    ## CSOKTRENDmagas     7.9941e-01  7.4255e-01  1.0766 0.2816712    
+    ## BUNOZES           -7.4589e-05  1.7100e-04 -0.4362 0.6626891    
+    ## SERTETT           -6.6433e-04  3.9119e-04 -1.6982 0.0894703 .  
+    ## PEDAGOGUS          4.9373e-01  4.6214e-01  1.0683 0.2853639    
+    ## ATLAGAR            1.0684e+00  8.6460e-02 12.3567 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -416,23 +440,23 @@ summary(model2)
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -41.83609  -2.21652  -0.32581   1.73821 115.18953 
+    ## -41.82608  -2.21033  -0.31175   1.72959 115.17952 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda 0.356005   0.031582  11.273 < 2.2e-16 ***
+    ## lambda 0.357011   0.031539   11.32 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##                      Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA              -3.7543e-03  2.2732e-03 -1.6516 0.0986210 .  
-    ## MUNKA             -6.4351e-02  1.0013e-01 -0.6427 0.5204302    
-    ## BERUHAZAS         -4.5852e-03  1.3524e-03 -3.3903 0.0006982 ***
-    ## CSOKTRENDalacsony  2.6641e+00  8.6434e-01  3.0823 0.0020543 ** 
-    ## CSOKTRENDmagas     1.5761e+00  6.9588e-01  2.2649 0.0235194 *  
-    ## BUNOZES           -6.9834e-05  1.7141e-04 -0.4074 0.6837026    
-    ## SERTETT           -7.2464e-04  3.9121e-04 -1.8523 0.0639846 .  
-    ## PEDAGOGUS          3.8896e-01  4.6280e-01  0.8404 0.4006587    
-    ## ATLAGAR            1.0385e+00  8.5643e-02 12.1263 < 2.2e-16 ***
+    ## SZJA              -3.7982e-03  2.2725e-03 -1.6714  0.094649 .  
+    ## MUNKA             -6.1937e-02  1.0011e-01 -0.6187  0.536111    
+    ## BERUHAZAS         -4.5791e-03  1.3517e-03 -3.3876  0.000705 ***
+    ## CSOKTRENDalacsony  2.6612e+00  8.6378e-01  3.0808  0.002064 ** 
+    ## CSOKTRENDmagas     1.5724e+00  6.9582e-01  2.2599  0.023830 *  
+    ## BUNOZES           -7.0103e-05  1.7136e-04 -0.4091  0.682475    
+    ## SERTETT           -7.2427e-04  3.9111e-04 -1.8518  0.064051 .  
+    ## PEDAGOGUS          3.9736e-01  4.6268e-01  0.8588  0.390433    
+    ## ATLAGAR            1.0385e+00  8.5629e-02 12.1280 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -459,22 +483,22 @@ summary(model3)
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -42.57811  -2.16945  -0.27426   1.72630 115.31856 
+    ## -42.56826  -2.17501  -0.27069   1.72066 115.30826 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda  0.36908    0.03115  11.848 < 2.2e-16 ***
+    ## lambda 0.370050   0.031122   11.89 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##              Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA      -2.0915e-03  2.1490e-03 -0.9733 0.3304234    
-    ## MUNKA     -9.2495e-02  9.9275e-02 -0.9317 0.3514890    
-    ## BERUHAZAS -4.6189e-03  1.3534e-03 -3.4129 0.0006429 ***
-    ## CSOK       1.5048e-02  7.6525e-03  1.9663 0.0492593 *  
-    ## BUNOZES   -6.9934e-05  1.7150e-04 -0.4078 0.6834375    
-    ## SERTETT   -7.4940e-04  3.9128e-04 -1.9153 0.0554592 .  
-    ## PEDAGOGUS  2.3010e-01  4.5840e-01  0.5020 0.6156893    
-    ## ATLAGAR    1.0503e+00  8.5953e-02 12.2197 < 2.2e-16 ***
+    ## SZJA      -2.1368e-03  2.1480e-03 -0.9948 0.3198463    
+    ## MUNKA     -9.0043e-02  9.9246e-02 -0.9073 0.3642659    
+    ## BERUHAZAS -4.6125e-03  1.3528e-03 -3.4096 0.0006505 ***
+    ## CSOK       1.5015e-02  7.6514e-03  1.9624 0.0497161 *  
+    ## BUNOZES   -7.0221e-05  1.7146e-04 -0.4096 0.6821323    
+    ## SERTETT   -7.4899e-04  3.9118e-04 -1.9147 0.0555280 .  
+    ## PEDAGOGUS  2.3891e-01  4.5828e-01  0.5213 0.6021415    
+    ## ATLAGAR    1.0503e+00  8.5937e-02 12.2220 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -501,22 +525,22 @@ summary(model4)
     ## 
     ## Residuals:
     ##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-    ## -42.57811  -2.16945  -0.27426   1.72630 115.31856 
+    ## -42.56826  -2.17501  -0.27069   1.72066 115.30826 
     ## 
     ## Spatial autoregressive coefficient:
     ##        Estimate Std. Error t-value  Pr(>|t|)    
-    ## lambda  0.36908    0.03115  11.848 < 2.2e-16 ***
+    ## lambda 0.370050   0.031122   11.89 < 2.2e-16 ***
     ## 
     ## Coefficients:
     ##              Estimate  Std. Error t-value  Pr(>|t|)    
-    ## SZJA      -2.0915e-03  2.1490e-03 -0.9733 0.3304234    
-    ## MUNKA     -9.2495e-02  9.9275e-02 -0.9317 0.3514890    
-    ## BERUHAZAS -4.6189e-03  1.3534e-03 -3.4129 0.0006429 ***
-    ## CSOK       1.5048e-02  7.6525e-03  1.9663 0.0492593 *  
-    ## BUNOZES   -6.9934e-05  1.7150e-04 -0.4078 0.6834375    
-    ## SERTETT   -7.4940e-04  3.9128e-04 -1.9153 0.0554592 .  
-    ## PEDAGOGUS  2.3010e-01  4.5840e-01  0.5020 0.6156893    
-    ## ATLAGAR    1.0503e+00  8.5953e-02 12.2197 < 2.2e-16 ***
+    ## SZJA      -2.1368e-03  2.1480e-03 -0.9948 0.3198463    
+    ## MUNKA     -9.0043e-02  9.9246e-02 -0.9073 0.3642659    
+    ## BERUHAZAS -4.6125e-03  1.3528e-03 -3.4096 0.0006505 ***
+    ## CSOK       1.5015e-02  7.6514e-03  1.9624 0.0497161 *  
+    ## BUNOZES   -7.0221e-05  1.7146e-04 -0.4096 0.6821323    
+    ## SERTETT   -7.4899e-04  3.9118e-04 -1.9147 0.0555280 .  
+    ## PEDAGOGUS  2.3891e-01  4.5828e-01  0.5213 0.6021415    
+    ## ATLAGAR    1.0503e+00  8.5937e-02 12.2220 < 2.2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -537,20 +561,28 @@ data.frame(AIC = c(paic(model1), paic(model2), paic(model3), paic(model4)) ,
 ```
 
     ##        AIC      BIC
-    ## 1 11938.25 12003.86
-    ## 2 11944.55 12004.70
-    ## 3 11948.18 12002.85
-    ## 4 11948.18 12002.85
+    ## 1 11937.56 12003.17
+    ## 2 11943.90 12004.04
+    ## 3 11947.52 12002.19
+    ## 4 11947.52 12002.19
 
 # SEM
 
 ``` r
 sem = "
   # measurement model
-    
+    EU =~ VEDONO + HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
   # regressions
-  
+    LAKAS ~ SZJA + MUNKA + ATLAGAR + EU + CSOK
   # residual correlations
+    ATLAGAR ~~ SZJA + EU
+    SZJA ~~ MUNKA + BERUHAZAS + EU
+    VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + HO_FORG_OSSZ + HO_FORG_RB
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
 "
 
 fit = sem(sem, data = df2012)

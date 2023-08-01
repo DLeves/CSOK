@@ -51,7 +51,8 @@ rm(cuts, labs)
 
 ### Adatok pótlása GAM-al
 
-```{r GAM model}
+#### Lakás GAM modell
+```{r lakas GAM model}
 gammodel = gam(LAKAS ~ s(X,Y, by = EV, k = 8), family = "gaussian", data = df, method = "REML")
 
 predicted = predict(gammodel, df)
@@ -68,6 +69,14 @@ for (i in 1:nrow(df)) {
 }
 
 rm(i, predicted, gammodel)
+```
+
+#### Eü adatok GAM modelljei
+
+
+VEDONO + HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
+```{r}
+sapply(df[,20:37], function(x) sum(is.na(x)))
 ```
 
 # Területi autokorreláció
@@ -164,7 +173,7 @@ corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color")
 corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
 ```
 
-```{r parcialis corrplot}
+```{r parcialis corrplot, fig.width=15, fig.height=15}
 pcor(na.omit(df[,c(4:8,14:19)]))$estimate
 corrplot(pcor(na.omit(df[,c(4:8,14:37)]))$estimate, method = "color")
 # corrplot(pcor(na.omit(df[,c(4:8,14:19)]))$estimate, method = "color", addCoef.col = "darkolivegreen")
@@ -271,10 +280,18 @@ data.frame(AIC = c(paic(model1), paic(model2), paic(model3), paic(model4)) ,
 ```{r sem, eval=FALSE}
 sem = "
   # measurement model
-    
+    EU =~ VEDONO + HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
   # regressions
-  
+    LAKAS ~ SZJA + MUNKA + ATLAGAR + EU + CSOK
   # residual correlations
+    ATLAGAR ~~ SZJA + EU
+    SZJA ~~ MUNKA + BERUHAZAS + EU
+    VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + HO_FORG_OSSZ + HO_FORG_RB
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
 "
 
 fit = sem(sem, data = df2012)

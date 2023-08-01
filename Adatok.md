@@ -43,7 +43,8 @@
 	-  [X] 10e főre arányosít
 	-  [x] Eddigi adatokkal összebarkácsol
 	-  [ ] Adatpótlás [GAM](GAM)-al?
-
+		- [ ] HGYO_SZAM
+		- [ ] FHGYO_SZOLG_SZAM
 [[tdk]]
 
 

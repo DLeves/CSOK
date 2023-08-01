@@ -1,4 +1,4 @@
-## Korrelációs mátrix
+## [Korrelációs mátrix](Adatábrázolás#Korrelációs%20mtx)
 
 
 
