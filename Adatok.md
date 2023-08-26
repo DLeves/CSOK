@@ -42,9 +42,10 @@
 	-  [X] Népességes adatokkal összereszel
 	-  [X] 10e főre arányosít
 	-  [x] Eddigi adatokkal összebarkácsol
-	-  [ ] Adatpótlás [GAM](GAM)-al?
-		- [ ] HGYO_SZAM
-		- [ ] FHGYO_SZOLG_SZAM
+	-  [x] Adatpótlás [GAM](GAM)-al?
+		- [x] HGYO_SZAM
+		- [x] FHGYO_SZOLG_SZAM
+		- 
 [[tdk]]
 
 

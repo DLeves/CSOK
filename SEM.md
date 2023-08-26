@@ -5,4 +5,8 @@
 - lakas ~ valtozok
 ## residual
 - atlagar ~~ szja
+
+## A modell maga
+-  [ ] WARNING: some observed variances are (at least) a factor 1000 times larger than others -> lehet, hogy normalizálni kellene?
+
 [[tdk]]

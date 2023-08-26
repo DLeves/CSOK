@@ -3,11 +3,11 @@
 		{"type":"file","file":"tdk.md","id":"9d8f228b0f9d2a4f","x":-280,"y":-400,"width":640,"height":740,"color":"6"},
 		{"type":"file","file":"GAM.md","id":"f738417c74d31d28","x":480,"y":180,"width":400,"height":400},
 		{"type":"file","file":"Panelmodell.md","id":"ad643f4a1fc0b7dc","x":640,"y":-400,"width":400,"height":400},
-		{"type":"file","file":"SEM.md","id":"ee5b44e332cb11ea","x":480,"y":-860,"width":400,"height":400},
 		{"type":"file","file":"Leíró stat.md","id":"60b4545d1aa72944","x":-680,"y":440,"width":400,"height":400},
 		{"type":"file","file":"Adatábrázolás.md","id":"988e2937975f3bb3","x":-40,"y":440,"width":400,"height":420},
 		{"type":"file","file":"Adatok.md","id":"f80c8dcd7713ae12","x":-1000,"y":-600,"width":440,"height":840},
-		{"type":"file","file":"Források.md","id":"f1e81e86ce5b87aa","x":-480,"y":-960,"width":400,"height":400}
+		{"type":"file","file":"Források.md","id":"f1e81e86ce5b87aa","x":-480,"y":-960,"width":400,"height":400},
+		{"type":"file","file":"SEM.md","id":"ee5b44e332cb11ea","x":480,"y":-860,"width":400,"height":400}
 	],
 	"edges":[
 		{"id":"43cb72f4180b87ba","fromNode":"60b4545d1aa72944","fromSide":"top","toNode":"9d8f228b0f9d2a4f","toSide":"bottom"},
