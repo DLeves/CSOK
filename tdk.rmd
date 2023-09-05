@@ -518,4 +518,39 @@ sem = "
 
 fit = sem(sem, data = df2012)
 summary(fit, standardized = T)
+
+vartable(fit)
 ```
+
+
+## Normalizált változókkal
+
+```{r}
+
+df2012$n_LAKAS_PRED = scale(df2012$LAKAS_PRED)
+df2012$n_HO_FORG_RB = scale(df2012$HO_FORG_RB)
+df2012$n_HO_FORG_OSSZ = scale(df2012$HO_FORG_OSSZ)
+df2012$n_SZJA = scale(df2012$SZJA)
+df2012$n_BERUHAZAS = scale(df2012$BERUHAZAS)
+
+sem = "
+  # measurement model
+    EU =~ VEDONO + n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
+  # regressions
+    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
+  # residual correlations
+    ATLAGAR ~~ n_SZJA + EU
+    n_SZJA ~~ MUNKA + n_BERUHAZAS + EU
+    VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + n_HO_FORG_OSSZ + n_HO_FORG_RB
+    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
+    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = df2012)
+summary(fit, standardized = T)
+```
+
+Munka, EU nem szignifikans?
