@@ -1,0 +1,13 @@
+- [x] Korr mtx
+- [x] Panelmodell béták
+- [ ] SEM
+	- [x] PC1 modell számol
+	- [x] SEM elmagyaráz
+	- [ ] SEM eredmények
+- [x] Tesztek p-értékei
+	- [x] Hausmann
+	- [x] Glob F
+- [x] Főkomp elmagyaráz
+- [x] Végső panel béták értelmezése
+- [ ] szignifikancia szintek
+- [ ] 

@@ -23,6 +23,7 @@ library(psych)
 library(ppcor)
 library(corrplot)
 library(lavaan)
+library(lavaanPlot)
 library(car)
 ```
 
@@ -207,21 +208,28 @@ describe(df2020$LAKAS)
 describe(df2021$LAKAS)
 ```
 
+```{r}
+psych::describe(df[,c(4:8,14:16,19,38:40)])
+psych::describe(df2021$ATLAGAR)
+```
+
+
 ## Korrelációk
 
 ```{r corrplot, fig.width=15, fig.height=15}
 cor(df[,c(4:8,14:19)], use = "complete.obs")
 corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color")
 corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+corrplot(cor(df[,c(4:8,14:16,19,38:40)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
 ```
 
-```{r parcialis corrplot, fig.width=15, fig.height=15, error=TRUE}
-pcor(na.omit(df[,c(4:8,14:37)]))$estimate
-corrplot(pcor(na.omit(df[,c(4:8,14:16,19:37)]))$estimate, method = "color")
+```{r parcialis corrplot kicsi, fig.width=15, fig.height=15, error=TRUE}
+pcor(na.omit(df[,c(4:8,38:41)]))$estimate
+corrplot(pcor(na.omit(df[,c(4:8,14:16,19,38:40)]))$estimate, method = "color")
 ```
 
-Nem tudom miert dob error, elozoleg mukodott rendesen.
-Azert le van mentve a kep:
+itt a nagy kép:
+
 ```{r}
 knitr::include_graphics("tdk_files/figure-gfm/parcialis corrplot-1.png")
 ```
@@ -231,7 +239,7 @@ knitr::include_graphics("tdk_files/figure-gfm/parcialis corrplot-1.png")
 
 ## Eü főkomponensek
 
-### Főkomponensek létehozása
+  ### Főkomponensek létehozása
 
 ```{r fokomp letrehoz}
 fokompok = prcomp(df[,c("VEDONO", "HO_FORG_RB", "HO_FORG_OSSZ", "FGYHO_SZOLG_SZAM", "HO_SZOLG_SZAM", "HO_APOLO_SZAM", "HGYO_SZAM")], center = TRUE, scale=TRUE)
@@ -505,9 +513,9 @@ sem = "
     EU =~ VEDONO + HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
   # regressions
     LAKAS_PRED ~ SZJA + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
   # residual correlations
-    ATLAGAR ~~ SZJA + EU
-    SZJA ~~ MUNKA + BERUHAZAS + EU
     VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + HO_FORG_OSSZ + HO_FORG_RB
     HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
     HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
@@ -538,9 +546,9 @@ sem = "
     EU =~ VEDONO + n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
   # regressions
     n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ n_SZJA + EU
+    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
   # residual correlations
-    ATLAGAR ~~ n_SZJA + EU
-    n_SZJA ~~ MUNKA + n_BERUHAZAS + EU
     VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + n_HO_FORG_OSSZ + n_HO_FORG_RB
     n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
     n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
@@ -553,4 +561,33 @@ fit = sem(sem, data = df2012)
 summary(fit, standardized = T)
 ```
 
-Munka, EU nem szignifikans?
+```{r}
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+```
+
+## Csak PC1-es latensvaltozoval
+```{r}
+sem = "
+  # measurement model
+    EU =~ n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+  # regressions
+    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ n_SZJA + EU
+    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+  # residual correlations
+    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
+    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = df2012)
+summary(fit, standardized = T)
+```
+
+
+```{r}
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+```
+
