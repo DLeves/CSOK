@@ -16,8 +16,8 @@
               "state": {
                 "file": "Canvas.canvas",
                 "viewState": {
-                  "x": -549.575623677455,
-                  "y": -435.08159678055335,
+                  "x": 96.6150329662536,
+                  "y": -855.6624994703947,
                   "zoom": -0.14140797820585116
                 }
               },
@@ -61,17 +61,19 @@
             }
           },
           {
-            "id": "79679ed3e198d740",
+            "id": "a6707b6397b85b40",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "markdown",
               "state": {
-                "file": "Source/2021_02_115.pdf"
+                "file": "Laci konzultáció.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -137,6 +139,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Laci konzultáció.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -153,6 +156,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Laci konzultáció.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +178,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Laci konzultáció.md"
+              }
             }
           },
           {
@@ -183,7 +189,9 @@
             "state": {
               "type": "all-properties",
               "state": {
-                "sortOrder": "frequency"
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
               }
             }
           }
@@ -204,38 +212,44 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b364bcfa32fc5ed5",
+  "active": "a6707b6397b85b40",
   "lastOpenFiles": [
-    "Szöveg.md",
-    "lu327116c5.tmp",
-    "tdk.md",
+    "lu26801z4d.tmp",
+    "lu26801z4a.tmp",
     "Adatok.md",
-    "lu327116c3.tmp",
+    "tdk.md",
+    "tdk_files/figure-gfm/semplot.png",
+    "Laci konzultáció.md",
+    "lu75742ivow.tmp",
+    "Source/Szigma2022_1_4_Kovacs.pdf",
+    "lu497211w9m.tmp",
+    "Source/2002_04_354.pdf",
+    "Source/nemes_alexandra_CSOK.pdf",
+    "Source/lakaspiaci-jelentes-2022-november-hun.pdf",
+    "Source/Kszemle_CIKK_2091.pdf",
+    "Source/Kszemle_CIKK_1998.pdf",
+    "Source/Kszemle_CIKK_1952.pdf",
+    "Adatábrázolás.md",
     "Canvas.canvas",
-    "Source/2021_02_115.pdf",
-    "lu6556dl9y.tmp",
     "Források.md",
-    "CSOK_TDK_DittrichL.docx",
-    "lu6392aj0c.tmp",
-    "lu6392aj0a.tmp",
-    "Szakdoga0604.docx",
-    "Untitled.canvas",
-    "Source/AZ9BGI_Projekt2 (2).pdf",
-    "tdk_files/figure-gfm/unnamed-chunk-5-1.png",
-    "Source/AZ9BGI_projekt2.pdf",
-    "SEM.md",
-    "tdk_files/figure-gfm/parcialis corrplot-1.png",
-    "tdk.knit.md",
-    "tdk_files/figure-gfm/unnamed-chunk-6-1.png",
+    "GAM.md",
+    "Leíró stat.md",
     "Panelmodell.md",
+    "README.md",
+    "SEM.md",
+    "Szöveg.md",
+    "tdk_files/figure-gfm/Rplot.png",
+    "tdk.knit.md",
+    "tdk_files/figure-gfm/unnamed-chunk-8-1.png",
+    "tdk_files/figure-gfm/unnamed-chunk-7-1.png",
+    "Untitled.canvas",
+    "tdk_files/figure-gfm/unnamed-chunk-5-1.png",
+    "tdk_files/figure-gfm/parcialis corrplot-1.png",
+    "tdk_files/figure-gfm/unnamed-chunk-6-1.png",
     "tdk_files/figure-gfm/corrplot-2.png",
     "tdk_files/figure-gfm/corrplot-1.png",
-    "Adatábrázolás.md",
-    "Leíró stat.md",
     "tdk_files.md",
     "Leíró.md",
-    "GAM.md",
-    "2023-07-15.md",
-    "README.md"
+    "2023-07-15.md"
   ]
 }

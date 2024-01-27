@@ -3,6 +3,7 @@ title: "CSOK TDK"
 output: 
   github_document:
     toc: true
+always_allow_html: true
 ---
 
 # Kezdő beállítások
@@ -209,7 +210,6 @@ describe(df2021$LAKAS)
 ```
 
 ```{r}
-psych::describe(df[,c(4:8,14:16,19,38:40)])
 psych::describe(df2021$ATLAGAR)
 ```
 
@@ -220,7 +220,6 @@ psych::describe(df2021$ATLAGAR)
 cor(df[,c(4:8,14:19)], use = "complete.obs")
 corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color")
 corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
-corrplot(cor(df[,c(4:8,14:16,19,38:40)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
 ```
 
 ```{r parcialis corrplot kicsi, fig.width=15, fig.height=15, error=TRUE}
@@ -279,6 +278,13 @@ Mik lehetnek az egyes főkomponensek?
 
 -   PC1: rendelők nagysága/leterheltsége
 -   PC2: gyermekorvosok száma
+
+### Korr mtx a főkompokkal együtt
+
+```{r}
+corrplot(cor(df[,c(4:8,14:16,19,38:40)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+```
+
 
 ## Tesztek
 
@@ -531,7 +537,7 @@ vartable(fit)
 ```
 
 
-## Normalizált változókkal
+## Normalizált változókkal 2012
 
 ```{r}
 
@@ -565,7 +571,7 @@ summary(fit, standardized = T)
 lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
 ```
 
-## Csak PC1-es latensvaltozoval
+ ## Csak PC1-es latensvaltozoval
 ```{r}
 sem = "
   # measurement model
@@ -589,5 +595,61 @@ summary(fit, standardized = T)
 
 ```{r}
 lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+knitr::include_graphics("tdk_files/figure-gfm/semplot.png")
 ```
 
+## 2016-os adatokon
+
+```{r}
+df2016$n_LAKAS_PRED = scale(df2016$LAKAS_PRED)
+df2016$n_HO_FORG_RB = scale(df2016$HO_FORG_RB)
+df2016$n_HO_FORG_OSSZ = scale(df2016$HO_FORG_OSSZ)
+df2016$n_SZJA = scale(df2016$SZJA)
+df2016$n_BERUHAZAS = scale(df2016$BERUHAZAS)
+
+sem = "
+  # measurement model
+    EU =~ n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+  # regressions
+    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ n_SZJA + EU
+    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+  # residual correlations
+    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
+    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = df2016)
+summary(fit, standardized = T)
+```
+
+## 2019-es adatokon
+
+```{r}
+df2019$n_LAKAS_PRED = scale(df2019$LAKAS_PRED)
+df2019$n_HO_FORG_RB = scale(df2019$HO_FORG_RB)
+df2019$n_HO_FORG_OSSZ = scale(df2019$HO_FORG_OSSZ)
+df2019$n_SZJA = scale(df2019$SZJA)
+df2019$n_BERUHAZAS = scale(df2019$BERUHAZAS)
+
+sem = "
+  # measurement model
+    EU =~ n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+  # regressions
+    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ n_SZJA + EU
+    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+  # residual correlations
+    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
+    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = df2019)
+summary(fit, standardized = T)
+```

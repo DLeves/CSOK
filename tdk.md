@@ -17,15 +17,16 @@ CSOK TDK
   - [Korrelációk](#korrelációk)
 - [Panelmodell](#panelmodell)
   - [Eü főkomponensek](#eü-főkomponensek)
-    - [Főkomponensek létehozása](#főkomponensek-létehozása)
     - [Kiválasztás és df-hez adás](#kiválasztás-és-df-hez-adás)
     - [Főkomponensek elnevezése](#főkomponensek-elnevezése)
+    - [Korr mtx a főkompokkal együtt](#korr-mtx-a-főkompokkal-együtt)
   - [Tesztek](#tesztek)
   - [Nem tudom mi legyen a cím itt](#nem-tudom-mi-legyen-a-cím-itt)
   - [Modellek](#modellek)
     - [AIC, BIC](#aic-bic)
 - [SEM](#sem)
   - [Normalizált változókkal](#normalizált-változókkal)
+  - [Csak PC1-es latensvaltozoval](#csak-pc1-es-latensvaltozoval)
 
 # Kezdő beállítások
 
@@ -45,6 +46,7 @@ library(psych)
 library(ppcor)
 library(corrplot)
 library(lavaan)
+library(lavaanPlot)
 library(car)
 ```
 
@@ -244,6 +246,13 @@ describe(df2020$LAKAS)
 describe(df2021$LAKAS)
 ```
 
+``` r
+psych::describe(df2021$ATLAGAR)
+```
+
+    ##    vars   n  mean    sd median trimmed  mad min   max range skew kurtosis   se
+    ## X1    1 175 15.74 11.78  11.69   13.54 7.02   3 68.51 65.51 2.01     4.58 0.89
+
 ## Korrelációk
 
 ``` r
@@ -300,23 +309,18 @@ corrplot(cor(df[,c(4:8,14:37)], use = "complete.obs"), method = "color", addCoef
 ![](tdk_files/figure-gfm/corrplot-2.png)<!-- -->
 
 ``` r
-pcor(na.omit(df[,c(4:8,14:37)]))$estimate
+pcor(na.omit(df[,c(4:8,38:41)]))$estimate
 ```
 
-    ## Error in solve.default(cvx): system is computationally singular: reciprocal condition number = 2.44954e-26
+    ## Error in `[.data.frame`(df, , c(4:8, 38:41)): undefined columns selected
 
 ``` r
-corrplot(pcor(na.omit(df[,c(4:8,14:16,19:37)]))$estimate, method = "color")
+corrplot(pcor(na.omit(df[,c(4:8,14:16,19,38:40)]))$estimate, method = "color")
 ```
 
-    ## Warning in pcor(na.omit(df[, c(4:8, 14:16, 19:37)])): The inverse of
-    ## variance-covariance matrix is calculated using Moore-Penrose generalized matrix
-    ## invers due to its determinant of zero.
+    ## Error in `[.data.frame`(df, , c(4:8, 14:16, 19, 38:40)): undefined columns selected
 
-![](tdk_files/figure-gfm/parcialis%20corrplot-1.png)<!-- -->
-
-Nem tudom miert dob error, elozoleg mukodott rendesen. Azert le van
-mentve a kep:
+itt a nagy kép:
 
 ``` r
 knitr::include_graphics("tdk_files/figure-gfm/parcialis corrplot-1.png")
@@ -328,7 +332,7 @@ knitr::include_graphics("tdk_files/figure-gfm/parcialis corrplot-1.png")
 
 ## Eü főkomponensek
 
-### Főkomponensek létehozása
+\### Főkomponensek létehozása
 
 ``` r
 fokompok = prcomp(df[,c("VEDONO", "HO_FORG_RB", "HO_FORG_OSSZ", "FGYHO_SZOLG_SZAM", "HO_SZOLG_SZAM", "HO_APOLO_SZAM", "HGYO_SZAM")], center = TRUE, scale=TRUE)
@@ -379,7 +383,7 @@ Akkor a VEDONO és elhagyásával járok jobban(source: próbálgatás).
 corrplot(cor(df[,c("VEDONO", "HO_FORG_RB", "HO_FORG_OSSZ", "FGYHO_SZOLG_SZAM", "HO_SZOLG_SZAM", "HO_APOLO_SZAM", "HGYO_SZAM", "PC1", "PC2")]), method = "color", addCoef.col = "black")
 ```
 
-![](tdk_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](tdk_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ### Főkomponensek elnevezése
 
@@ -387,6 +391,14 @@ Mik lehetnek az egyes főkomponensek?
 
 - PC1: rendelők nagysága/leterheltsége
 - PC2: gyermekorvosok száma
+
+### Korr mtx a főkompokkal együtt
+
+``` r
+corrplot(cor(df[,c(4:8,14:16,19,38:40)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+```
+
+![](tdk_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## Tesztek
 
@@ -1062,9 +1074,9 @@ sem = "
     EU =~ VEDONO + HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
   # regressions
     LAKAS_PRED ~ SZJA + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
   # residual correlations
-    ATLAGAR ~~ SZJA + EU
-    SZJA ~~ MUNKA + BERUHAZAS + EU
     VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + HO_FORG_OSSZ + HO_FORG_RB
     HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
     HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
@@ -1083,22 +1095,32 @@ fit = sem(sem, data = df2012)
     ## Warning in lav_data_full(data = data, group = group, cluster = cluster, : lavaan WARNING: some observed variances are larger than 1000000
     ##   lavaan NOTE: use varTable(fit) to investigate
 
-    ## Warning in lavaan::lavaan(model = sem, data = df2012, model.type = "sem", : lavaan WARNING:
-    ##     the optimizer warns that a solution has NOT been found!
+    ## Warning in lav_model_vcov(lavmodel = lavmodel, lavsamplestats = lavsamplestats, : lavaan WARNING:
+    ##     Could not compute standard errors! The information matrix could
+    ##     not be inverted. This may be a symptom that the model is not
+    ##     identified.
+
+    ## Warning in lav_object_post_check(object): lavaan WARNING: the covariance matrix of the residuals of the observed
+    ##                 variables (theta) is not positive definite;
+    ##                 use lavInspect(fit, "theta") to investigate.
 
 ``` r
 summary(fit, standardized = T)
 ```
 
-    ## lavaan 0.6.16 did NOT end normally after 10000 iterations
-    ## ** WARNING ** Estimates below are most likely unreliable
+    ## lavaan 0.6.16 ended normally after 435 iterations
     ## 
     ##   Estimator                                         ML
     ##   Optimization method                           NLMINB
-    ##   Number of model parameters                        48
+    ##   Number of model parameters                        46
     ## 
     ##   Number of observations                           175
     ## 
+    ## Model Test User Model:
+    ##                                                       
+    ##   Test statistic                               403.731
+    ##   Degrees of freedom                                42
+    ##   P-value (Chi-square)                           0.000
     ## 
     ## Parameter Estimates:
     ## 
@@ -1109,75 +1131,71 @@ summary(fit, standardized = T)
     ## Latent Variables:
     ##                    Estimate    Std.Err  z-value  P(>|z|)   Std.lv    Std.all
     ##   EU =~                                                                     
-    ##     VEDONO              1.000                                 5.269    0.051
-    ##     HO_FORG_RB       4687.095       NA                    24694.382    1.000
-    ##     HO_FORG_OSSZ     4739.434       NA                    24970.137    1.000
-    ##     FGYHO_SZOLG_SZ      1.305       NA                        6.878    0.137
-    ##     HO_SZOLG_SZAM       2.330       NA                       12.277    0.099
-    ##     HO_APOLO_SZAM       4.276       NA                       22.529    0.101
-    ##     HGYO_SZAM           1.885       NA                        9.931    0.089
+    ##     VEDONO              1.000                                 0.145    0.197
+    ##     HO_FORG_RB      83746.078       NA                    12171.611    0.997
+    ##     HO_FORG_OSSZ    84683.239       NA                    12307.818    0.999
+    ##     FGYHO_SZOLG_SZ      7.291       NA                        1.060    0.706
+    ##     HO_SZOLG_SZAM       4.510       NA                        0.656    0.768
+    ##     HO_APOLO_SZAM       5.238       NA                        0.761    0.667
+    ##     HGYO_SZAM          -1.474       NA                       -0.214   -0.537
     ## 
     ## Regressions:
     ##                    Estimate    Std.Err  z-value  P(>|z|)   Std.lv    Std.all
     ##   LAKAS_PRED ~                                                              
-    ##     SZJA               -0.009       NA                       -0.009   -0.169
-    ##     MUNKA               0.079       NA                        0.079    0.034
-    ##     ATLAGAR             2.049       NA                        2.049    0.889
-    ##     EU                 -0.089       NA                       -0.466   -0.046
+    ##     SZJA               -0.010       NA                       -0.010   -0.157
+    ##     MUNKA               0.086       NA                        0.086    0.041
+    ##     ATLAGAR             2.001       NA                        2.001    0.786
+    ##     EU                 -4.699       NA                       -0.683   -0.074
+    ##   ATLAGAR ~                                                                 
+    ##     SZJA                0.012       NA                        0.012    0.496
+    ##     EU                -10.516       NA                       -1.528   -0.424
+    ##   SZJA ~                                                                    
+    ##     MUNKA              12.136       NA                       12.136    0.357
+    ##     BERUHAZAS           0.072       NA                        0.072    0.077
+    ##     EU               -557.628       NA                      -81.045   -0.540
     ## 
     ## Covariances:
     ##                       Estimate    Std.Err  z-value  P(>|z|)   Std.lv    Std.all
-    ##   SZJA ~~                                                                      
-    ##     ATLAGAR              681.817       NA                      681.817    0.809
-    ##   EU ~~                                                                        
-    ##     ATLAGAR              -14.867       NA                       -2.822   -0.642
-    ##   SZJA ~~                                                                      
-    ##     MUNKA                 60.359       NA                       60.359    0.071
-    ##     BERUHAZAS          11136.156       NA                    11136.156    0.255
-    ##   EU ~~                                                                        
-    ##     SZJA                -557.028       NA                     -105.726   -0.551
     ##  .VEDONO ~~                                                                    
-    ##    .HO_APOLO_SZAM          2.088       NA                        2.088    0.000
-    ##     HO_SZAM             2790.507       NA                     2790.507    0.995
-    ##    .HO_FORG_OSSZ       95692.671       NA                    95692.671    2.676
-    ##    .HO_FORG_RB         94683.816       NA                    94683.816    8.827
+    ##    .HO_APOLO_SZAM          0.049       NA                        0.049    0.079
+    ##     HO_SZAM                0.160       NA                        0.160    0.293
+    ##    .HO_FORG_OSSZ         145.980       NA                      145.980    0.424
+    ##    .HO_FORG_RB           273.911       NA                      273.911    0.410
     ##  .HO_FORG_RB ~~                                                                
-    ##    .HGYO_SZAM          11328.306       NA                    11328.306    0.976
-    ##    .HO_APOLO_SZAM      -7965.894       NA                    -7965.894   -0.344
-    ##    .HO_SZOLG_SZAM       6815.563       NA                     6815.563    0.532
-    ##    .FGYHO_SZOLG_SZ    -51580.397       NA                   -51580.397   -9.992
-    ##    .HO_FORG_OSSZ      -67869.418       NA                   -67869.418   -1.886
+    ##    .HGYO_SZAM            -51.964       NA                      -51.964   -0.167
+    ##    .HO_APOLO_SZAM        256.676       NA                      256.676    0.327
+    ##    .HO_SZOLG_SZAM       -461.975       NA                     -461.975   -0.915
+    ##    .FGYHO_SZOLG_SZ       208.868       NA                      208.868    0.213
+    ##    .HO_FORG_OSSZ          -0.010       NA                       -0.010   -0.000
     ##  .HO_FORG_OSSZ ~~                                                              
-    ##    .HGYO_SZAM           4048.203       NA                     4048.203    0.105
-    ##    .HO_APOLO_SZAM     -23341.861       NA                   -23341.861   -0.302
-    ##    .HO_SZOLG_SZAM      -1263.969       NA                    -1263.969   -0.030
-    ##    .FGYHO_SZOLG_SZ    -56441.312       NA                   -56441.312   -3.279
+    ##    .HGYO_SZAM            -48.705       NA                      -48.705   -0.305
+    ##    .HO_APOLO_SZAM        230.148       NA                      230.148    0.570
+    ##    .HO_SZOLG_SZAM       -531.838       NA                     -531.838   -2.046
+    ##    .FGYHO_SZOLG_SZ       214.652       NA                      214.652    0.426
     ##  .FGYHO_SZOLG_SZAM ~~                                                          
-    ##    .HGYO_SZAM           5122.807       NA                     5122.807    0.923
-    ##    .HO_APOLO_SZAM      10365.301       NA                    10365.301    0.936
-    ##    .HO_SZOLG_SZAM       5643.468       NA                     5643.468    0.921
+    ##    .HGYO_SZAM             -0.182       NA                       -0.182   -0.510
+    ##    .HO_APOLO_SZAM          0.333       NA                        0.333    0.368
+    ##    .HO_SZOLG_SZAM          0.218       NA                        0.218    0.376
     ##  .HO_SZOLG_SZAM ~~                                                             
-    ##    .HO_APOLO_SZAM      27480.170       NA                    27480.170    0.999
-    ##    .HGYO_SZAM          13782.132       NA                    13782.132    1.000
+    ##    .HO_APOLO_SZAM          0.296       NA                        0.296    0.637
+    ##    .HGYO_SZAM              0.014       NA                        0.014    0.076
     ##  .HO_APOLO_SZAM ~~                                                             
-    ##    .HGYO_SZAM          24906.468       NA                    24906.468    0.999
+    ##    .HGYO_SZAM             -0.029       NA                       -0.029   -0.100
     ## 
     ## Variances:
     ##                    Estimate    Std.Err  z-value  P(>|z|)   Std.lv    Std.all
-    ##    .VEDONO          10659.057       NA                    10659.057    0.997
-    ##    .HO_FORG_RB     -10794.351       NA                   -10794.351   -0.000
-    ##    .HO_FORG_OSSZ   120002.014       NA                   120002.014    0.000
-    ##    .FGYHO_SZOLG_SZ   2468.499       NA                     2468.499    0.981
-    ##    .HO_SZOLG_SZAM   15208.771       NA                    15208.771    0.990
-    ##    .HO_APOLO_SZAM   49729.406       NA                    49729.406    0.990
-    ##    .HGYO_SZAM       12489.419       NA                    12489.419    0.992
-    ##    .LAKAS_PRED         38.945       NA                       38.945    0.378
-    ##     SZJA            36753.102       NA                    36753.102    1.000
-    ##     MUNKA              19.506       NA                       19.506    1.000
-    ##     ATLAGAR            19.346       NA                       19.346    1.000
-    ##     BERUHAZAS       51785.183       NA                    51785.183    1.000
-    ##     HO_SZAM           737.190       NA                      737.190    1.000
-    ##     EU                 27.758       NA                        1.000    1.000
+    ##    .VEDONO              0.525       NA                        0.525    0.961
+    ##    .HO_FORG_RB     851301.145       NA                   851301.145    0.006
+    ##    .HO_FORG_OSSZ   225579.062       NA                   225579.062    0.001
+    ##    .FGYHO_SZOLG_SZ      1.127       NA                        1.127    0.501
+    ##    .HO_SZOLG_SZAM       0.300       NA                        0.300    0.411
+    ##    .HO_APOLO_SZAM       0.724       NA                        0.724    0.555
+    ##    .HGYO_SZAM           0.113       NA                        0.113    0.712
+    ##    .LAKAS_PRED         38.044       NA                       38.044    0.452
+    ##    .ATLAGAR             4.506       NA                        4.506    0.347
+    ##    .SZJA            12142.463       NA                    12142.463    0.540
+    ##     HO_SZAM             0.567       NA                        0.567    1.000
+    ##     EU                  0.021       NA                        1.000    1.000
 
 ``` r
 vartable(fit)
@@ -1192,10 +1210,10 @@ vartable(fit)
     ## 6     HO_APOLO_SZAM  22  175 numeric   0    0     5.996 1.312000e+00    0     
     ## 7         HGYO_SZAM  21  175 numeric   0    0     1.310 1.600000e-01    0     
     ## 8        LAKAS_PRED  38  175 numeric   0    0     8.176 8.976800e+01    0     
-    ## 9              SZJA   5  175 numeric   0    0   692.955 2.686650e+04    0     
-    ## 10            MUNKA   6  175 numeric   0    0    54.795 1.960900e+01    0     
-    ## 11          ATLAGAR  19  175 numeric   0    0     6.446 1.461600e+01    0     
-    ## 12        BERUHAZAS   7  175 numeric   0    0   339.526 2.575309e+04    0     
+    ## 9           ATLAGAR  19  175 numeric   0    0     6.446 1.461600e+01    0     
+    ## 10             SZJA   5  175 numeric   0    0   692.955 2.686650e+04    0     
+    ## 11            MUNKA   6  175 numeric   1    0    54.795 1.960900e+01    0     
+    ## 12        BERUHAZAS   7  175 numeric   1    0   339.526 2.575309e+04    0     
     ## 13          HO_SZAM  20  175 numeric   0    0     5.012 5.700000e-01    0
 
 ## Normalizált változókkal
@@ -1212,9 +1230,9 @@ sem = "
     EU =~ VEDONO + n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
   # regressions
     n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ n_SZJA + EU
+    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
   # residual correlations
-    ATLAGAR ~~ n_SZJA + EU
-    n_SZJA ~~ MUNKA + n_BERUHAZAS + EU
     VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + n_HO_FORG_OSSZ + n_HO_FORG_RB
     n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
     n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
@@ -1227,18 +1245,18 @@ fit = sem(sem, data = df2012)
 summary(fit, standardized = T)
 ```
 
-    ## lavaan 0.6.16 ended normally after 147 iterations
+    ## lavaan 0.6.16 ended normally after 227 iterations
     ## 
     ##   Estimator                                         ML
     ##   Optimization method                           NLMINB
-    ##   Number of model parameters                        49
+    ##   Number of model parameters                        47
     ## 
     ##   Number of observations                           175
     ## 
     ## Model Test User Model:
     ##                                                       
-    ##   Test statistic                               489.097
-    ##   Degrees of freedom                                42
+    ##   Test statistic                               396.082
+    ##   Degrees of freedom                                41
     ##   P-value (Chi-square)                           0.000
     ## 
     ## Parameter Estimates:
@@ -1250,75 +1268,194 @@ summary(fit, standardized = T)
     ## Latent Variables:
     ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
     ##   EU =~                                                                 
-    ##     VEDONO            1.000                               0.154    0.208
-    ##     n_HO_FORG_RB      5.731    2.284    2.509    0.012    0.882    0.885
-    ##     n_HO_FORG_OSSZ    5.714    2.286    2.500    0.012    0.879    0.882
-    ##     FGYHO_SZOLG_SZ    5.778    2.409    2.398    0.016    0.889    0.593
-    ##     HO_SZOLG_SZAM     3.605    1.486    2.425    0.015    0.555    0.650
-    ##     HO_APOLO_SZAM     4.364    1.784    2.447    0.014    0.672    0.588
-    ##     HGYO_SZAM        -1.187    0.516   -2.300    0.021   -0.183   -0.458
+    ##     VEDONO            1.000                               0.122    0.163
+    ##     n_HO_FORG_RB      6.889    3.318    2.076    0.038    0.838    0.841
+    ##     n_HO_FORG_OSSZ    6.888    3.328    2.070    0.038    0.838    0.841
+    ##     FGYHO_SZOLG_SZ    6.950    3.484    1.995    0.046    0.845    0.563
+    ##     HO_SZOLG_SZAM     4.417    2.193    2.014    0.044    0.537    0.630
+    ##     HO_APOLO_SZAM     5.250    2.583    2.033    0.042    0.639    0.560
+    ##     HGYO_SZAM        -1.443    0.745   -1.937    0.053   -0.176   -0.440
     ## 
     ## Regressions:
     ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
     ##   n_LAKAS_PRED ~                                                        
-    ##     n_SZJA           -0.213    0.103   -2.076    0.038   -0.213   -0.187
-    ##     n_BERUHAZAS       0.150    0.050    2.981    0.003    0.150    0.145
-    ##     MUNKA            -0.014    0.012   -1.204    0.229   -0.014   -0.061
-    ##     ATLAGAR           0.203    0.057    3.592    0.000    0.203    0.751
-    ##     EU               -1.153    1.799   -0.641    0.522   -0.177   -0.172
+    ##     n_SZJA           -0.226    0.095   -2.379    0.017   -0.226   -0.206
+    ##     n_BERUHAZAS       0.155    0.064    2.415    0.016    0.155    0.153
+    ##     MUNKA            -0.011    0.016   -0.689    0.491   -0.011   -0.047
+    ##     ATLAGAR           0.191    0.043    4.440    0.000    0.191    0.700
+    ##     EU               -1.888    1.788   -1.056    0.291   -0.230   -0.228
+    ##   ATLAGAR ~                                                             
+    ##     n_SZJA            1.165    0.449    2.597    0.009    1.165    0.290
+    ##     EU              -20.080   10.573   -1.899    0.058   -2.442   -0.662
+    ##   n_SZJA ~                                                              
+    ##     MUNKA             0.063    0.014    4.383    0.000    0.063    0.305
+    ##     n_BERUHAZAS       0.110    0.063    1.740    0.082    0.110    0.120
+    ##     EU               -4.978    2.481   -2.007    0.045   -0.606   -0.659
     ## 
     ## Covariances:
     ##                       Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
-    ##   n_SZJA ~~                                                                
-    ##     ATLAGAR              2.538    0.316    8.029    0.000    2.538    0.738
-    ##   EU ~~                                                                    
-    ##     ATLAGAR             -0.492    0.205   -2.403    0.016   -3.195   -0.838
-    ##   n_SZJA ~~                                                                
-    ##     MUNKA                0.875    0.208    4.208    0.000    0.875    0.220
-    ##     n_BERUHAZAS          0.123    0.044    2.790    0.005    0.123    0.136
-    ##   EU ~~                                                                    
-    ##     n_SZJA              -0.095    0.040   -2.376    0.018   -0.619   -0.686
     ##  .VEDONO ~~                                                                
-    ##    .HO_APOLO_SZAM        0.047    0.034    1.369    0.171    0.047    0.070
-    ##     HO_SZAM              0.169    0.042    3.992    0.000    0.169    0.310
-    ##    .n_HO_FORG_OSSZ       0.013    0.041    0.308    0.758    0.013    0.037
-    ##    .n_HO_FORG_RB         0.023    0.041    0.548    0.584    0.023    0.067
+    ##    .HO_APOLO_SZAM        0.051    0.034    1.510    0.131    0.051    0.074
+    ##     HO_SZAM              0.184    0.043    4.258    0.000    0.184    0.332
+    ##    .n_HO_FORG_OSSZ       0.030    0.029    1.046    0.296    0.030    0.076
+    ##    .n_HO_FORG_RB         0.040    0.029    1.401    0.161    0.040    0.101
     ##  .n_HO_FORG_RB ~~                                                          
-    ##    .HGYO_SZAM           -0.056    0.068   -0.822    0.411   -0.056   -0.340
-    ##    .HO_APOLO_SZAM        0.185    0.244    0.760    0.447    0.185    0.432
-    ##    .HO_SZOLG_SZAM        0.125    0.202    0.618    0.536    0.125    0.414
-    ##    .FGYHO_SZOLG_SZ       0.286    0.326    0.878    0.380    0.286    0.509
-    ##    .n_HO_FORG_OSSZ       0.215    0.320    0.671    0.502    0.215    0.984
+    ##    .HGYO_SZAM           -0.070    0.027   -2.572    0.010   -0.070   -0.362
+    ##    .HO_APOLO_SZAM        0.241    0.086    2.812    0.005    0.241    0.473
+    ##    .HO_SZOLG_SZAM        0.163    0.068    2.416    0.016    0.163    0.456
+    ##    .FGYHO_SZOLG_SZ       0.359    0.115    3.125    0.002    0.359    0.537
+    ##    .n_HO_FORG_OSSZ       0.287    0.096    3.006    0.003    0.287    0.988
     ##  .n_HO_FORG_OSSZ ~~                                                        
-    ##    .HGYO_SZAM           -0.057    0.068   -0.831    0.406   -0.057   -0.341
-    ##    .HO_APOLO_SZAM        0.186    0.244    0.763    0.445    0.186    0.430
-    ##    .HO_SZOLG_SZAM        0.122    0.202    0.605    0.545    0.122    0.401
-    ##    .FGYHO_SZOLG_SZ       0.291    0.326    0.892    0.373    0.291    0.512
+    ##    .HGYO_SZAM           -0.070    0.027   -2.575    0.010   -0.070   -0.364
+    ##    .HO_APOLO_SZAM        0.241    0.086    2.800    0.005    0.241    0.472
+    ##    .HO_SZOLG_SZAM        0.159    0.068    2.357    0.018    0.159    0.445
+    ##    .FGYHO_SZOLG_SZ       0.362    0.115    3.141    0.002    0.362    0.541
     ##  .FGYHO_SZOLG_SZAM ~~                                                      
-    ##    .HGYO_SZAM           -0.247    0.079   -3.146    0.002   -0.247   -0.577
-    ##    .HO_APOLO_SZAM        0.543    0.261    2.075    0.038    0.543    0.486
-    ##    .HO_SZOLG_SZAM        0.418    0.216    1.938    0.053    0.418    0.534
+    ##    .HGYO_SZAM           -0.261    0.047   -5.558    0.000   -0.261   -0.588
+    ##    .HO_APOLO_SZAM        0.598    0.131    4.578    0.000    0.598    0.510
+    ##    .HO_SZOLG_SZAM        0.457    0.100    4.573    0.000    0.457    0.556
     ##  .HO_SZOLG_SZAM ~~                                                         
-    ##    .HO_APOLO_SZAM        0.423    0.162    2.608    0.009    0.423    0.706
-    ##    .HGYO_SZAM           -0.025    0.046   -0.545    0.586   -0.025   -0.109
+    ##    .HO_APOLO_SZAM        0.451    0.079    5.703    0.000    0.451    0.720
+    ##    .HGYO_SZAM           -0.032    0.024   -1.361    0.173   -0.032   -0.135
     ##  .HO_APOLO_SZAM ~~                                                         
-    ##    .HGYO_SZAM           -0.069    0.056   -1.220    0.222   -0.069   -0.210
+    ##    .HGYO_SZAM           -0.079    0.032   -2.470    0.014   -0.079   -0.233
     ## 
     ## Variances:
     ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
-    ##    .VEDONO            0.526    0.057    9.249    0.000    0.526    0.957
-    ##    .n_HO_FORG_RB      0.216    0.321    0.674    0.500    0.216    0.217
-    ##    .n_HO_FORG_OSSZ    0.221    0.320    0.690    0.490    0.221    0.222
-    ##    .FGYHO_SZOLG_SZ    1.461    0.369    3.963    0.000    1.461    0.649
-    ##    .HO_SZOLG_SZAM     0.421    0.136    3.091    0.002    0.421    0.577
-    ##    .HO_APOLO_SZAM     0.852    0.205    4.162    0.000    0.852    0.654
-    ##    .HGYO_SZAM         0.126    0.020    6.309    0.000    0.126    0.791
-    ##    .n_LAKAS_PRED      0.408    0.046    8.801    0.000    0.408    0.383
-    ##     n_SZJA            0.814    0.084    9.730    0.000    0.814    1.000
-    ##     n_BERUHAZAS       0.994    0.106    9.354    0.000    0.994    1.000
-    ##     MUNKA            19.497    2.084    9.354    0.000   19.497    1.000
-    ##     ATLAGAR          14.533    1.554    9.354    0.000   14.533    1.000
+    ##    .VEDONO            0.542    0.058    9.345    0.000    0.542    0.973
+    ##    .n_HO_FORG_RB      0.291    0.096    3.042    0.002    0.291    0.293
+    ##    .n_HO_FORG_OSSZ    0.291    0.096    3.039    0.002    0.291    0.293
+    ##    .FGYHO_SZOLG_SZ    1.536    0.205    7.506    0.000    1.536    0.683
+    ##    .HO_SZOLG_SZAM     0.440    0.065    6.732    0.000    0.440    0.604
+    ##    .HO_APOLO_SZAM     0.894    0.117    7.624    0.000    0.894    0.687
+    ##    .HGYO_SZAM         0.128    0.015    8.468    0.000    0.128    0.807
+    ##    .n_LAKAS_PRED      0.404    0.046    8.811    0.000    0.404    0.398
+    ##    .ATLAGAR           3.066    0.841    3.644    0.000    3.066    0.225
+    ##    .n_SZJA            0.348    0.061    5.738    0.000    0.348    0.412
     ##     HO_SZAM           0.567    0.061    9.354    0.000    0.567    1.000
-    ##     EU                0.024    0.019    1.248    0.212    1.000    1.000
+    ##     EU                0.015    0.014    1.025    0.305    1.000    1.000
 
-Munka, EU nem szignifikans?
+``` r
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+```
+
+    ## PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
+
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-493a6be52839261a1951" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-493a6be52839261a1951">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n n_SZJA; n_BERUHAZAS; MUNKA; ATLAGAR; n_LAKAS_PRED; VEDONO; n_HO_FORG_RB; n_HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM; HGYO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n n_SZJA->n_LAKAS_PRED [label = \"-0.23\"] n_BERUHAZAS->n_LAKAS_PRED [label = \"0.15\"] MUNKA->n_LAKAS_PRED [label = \"-0.01\"] ATLAGAR->n_LAKAS_PRED [label = \"0.19\"] EU->n_LAKAS_PRED [label = \"-1.89\"] n_SZJA->ATLAGAR [label = \"1.17\"] EU->ATLAGAR [label = \"-20.08\"] MUNKA->n_SZJA [label = \"0.06\"] n_BERUHAZAS->n_SZJA [label = \"0.11\"] EU->n_SZJA [label = \"-4.98\"] EU->VEDONO [label = \"1\"] EU->n_HO_FORG_RB [label = \"6.89\"] EU->n_HO_FORG_OSSZ [label = \"6.89\"] EU->FGYHO_SZOLG_SZAM [label = \"6.95\"] EU->HO_SZOLG_SZAM [label = \"4.42\"] EU->HO_APOLO_SZAM [label = \"5.25\"] EU->HGYO_SZAM [label = \"-1.44\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+## Csak PC1-es latensvaltozoval
+
+``` r
+sem = "
+  # measurement model
+    EU =~ n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+  # regressions
+    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ n_SZJA + EU
+    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+  # residual correlations
+    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
+    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = df2012)
+summary(fit, standardized = T)
+```
+
+    ## lavaan 0.6.16 ended normally after 137 iterations
+    ## 
+    ##   Estimator                                         ML
+    ##   Optimization method                           NLMINB
+    ##   Number of model parameters                        39
+    ## 
+    ##   Number of observations                           175
+    ## 
+    ## Model Test User Model:
+    ##                                                       
+    ##   Test statistic                               129.925
+    ##   Degrees of freedom                                24
+    ##   P-value (Chi-square)                           0.000
+    ## 
+    ## Parameter Estimates:
+    ## 
+    ##   Standard errors                             Standard
+    ##   Information                                 Expected
+    ##   Information saturated (h1) model          Structured
+    ## 
+    ## Latent Variables:
+    ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##   EU =~                                                                 
+    ##     n_HO_FORG_RB      1.000                               0.699    0.757
+    ##     n_HO_FORG_OSSZ    1.001    0.011   93.278    0.000    0.699    0.758
+    ##     FGYHO_SZOLG_SZ    0.638    0.115    5.540    0.000    0.446    0.315
+    ##     HO_SZOLG_SZAM     0.676    0.075    9.015    0.000    0.473    0.574
+    ##     HO_APOLO_SZAM     0.732    0.105    6.946    0.000    0.512    0.467
+    ## 
+    ## Regressions:
+    ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##   n_LAKAS_PRED ~                                                        
+    ##     n_SZJA           -0.198    0.088   -2.235    0.025   -0.198   -0.182
+    ##     n_BERUHAZAS       0.150    0.064    2.356    0.018    0.150    0.149
+    ##     MUNKA            -0.010    0.016   -0.633    0.526   -0.010   -0.045
+    ##     ATLAGAR           0.187    0.047    3.966    0.000    0.187    0.684
+    ##     EU               -0.319    0.276   -1.158    0.247   -0.223   -0.223
+    ##   ATLAGAR ~                                                             
+    ##     n_SZJA            1.395    0.408    3.418    0.001    1.395    0.351
+    ##     EU               -3.299    0.844   -3.911    0.000   -2.306   -0.630
+    ##   n_SZJA ~                                                              
+    ##     MUNKA             0.077    0.015    5.056    0.000    0.077    0.369
+    ##     n_BERUHAZAS       0.087    0.066    1.315    0.189    0.087    0.094
+    ##     EU               -0.773    0.142   -5.444    0.000   -0.540   -0.586
+    ## 
+    ## Covariances:
+    ##                       Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##  .n_HO_FORG_RB ~~                                                          
+    ##     HGYO_SZAM           -0.130    0.023   -5.531    0.000   -0.130   -0.538
+    ##    .HO_APOLO_SZAM        0.299    0.083    3.596    0.000    0.299    0.511
+    ##    .HO_SZOLG_SZAM        0.199    0.067    2.960    0.003    0.199    0.489
+    ##    .FGYHO_SZOLG_SZ       0.521    0.099    5.236    0.000    0.521    0.643
+    ##    .n_HO_FORG_OSSZ       0.360    0.091    3.957    0.000    0.360    0.990
+    ##  .n_HO_FORG_OSSZ ~~                                                        
+    ##     HGYO_SZAM           -0.130    0.023   -5.546    0.000   -0.130   -0.540
+    ##    .HO_APOLO_SZAM        0.298    0.083    3.584    0.000    0.298    0.510
+    ##    .HO_SZOLG_SZAM        0.194    0.067    2.900    0.004    0.194    0.479
+    ##    .FGYHO_SZOLG_SZ       0.522    0.099    5.250    0.000    0.522    0.646
+    ##  .FGYHO_SZOLG_SZAM ~~                                                      
+    ##     HGYO_SZAM           -0.354    0.049   -7.213    0.000   -0.354   -0.660
+    ##    .HO_APOLO_SZAM        0.728    0.126    5.790    0.000    0.728    0.559
+    ##    .HO_SZOLG_SZAM        0.546    0.094    5.816    0.000    0.546    0.602
+    ##  .HO_SZOLG_SZAM ~~                                                         
+    ##    .HO_APOLO_SZAM        0.480    0.079    6.067    0.000    0.480    0.733
+    ##     HGYO_SZAM           -0.067    0.022   -3.021    0.003   -0.067   -0.250
+    ##  .HO_APOLO_SZAM ~~                                                         
+    ##     HGYO_SZAM           -0.127    0.032   -3.984    0.000   -0.127   -0.328
+    ## 
+    ## Variances:
+    ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##    .n_HO_FORG_RB      0.364    0.091    3.996    0.000    0.364    0.427
+    ##    .n_HO_FORG_OSSZ    0.363    0.091    3.985    0.000    0.363    0.426
+    ##    .FGYHO_SZOLG_SZ    1.804    0.202    8.931    0.000    1.804    0.901
+    ##    .HO_SZOLG_SZAM     0.455    0.066    6.902    0.000    0.455    0.671
+    ##    .HO_APOLO_SZAM     0.940    0.117    8.032    0.000    0.940    0.782
+    ##    .n_LAKAS_PRED      0.403    0.046    8.702    0.000    0.403    0.402
+    ##    .ATLAGAR           2.949    0.923    3.195    0.001    2.949    0.220
+    ##    .n_SZJA            0.398    0.064    6.233    0.000    0.398    0.468
+    ##     HGYO_SZAM         0.159    0.017    9.354    0.000    0.159    1.000
+    ##     EU                0.489    0.110    4.450    0.000    1.000    1.000
+
+``` r
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+```
+
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d8af720b5661e106872a" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-d8af720b5661e106872a">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n n_SZJA; n_BERUHAZAS; MUNKA; ATLAGAR; n_LAKAS_PRED; n_HO_FORG_RB; n_HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n n_SZJA->n_LAKAS_PRED [label = \"-0.2\"] n_BERUHAZAS->n_LAKAS_PRED [label = \"0.15\"] MUNKA->n_LAKAS_PRED [label = \"-0.01\"] ATLAGAR->n_LAKAS_PRED [label = \"0.19\"] EU->n_LAKAS_PRED [label = \"-0.32\"] n_SZJA->ATLAGAR [label = \"1.39\"] EU->ATLAGAR [label = \"-3.3\"] MUNKA->n_SZJA [label = \"0.08\"] n_BERUHAZAS->n_SZJA [label = \"0.09\"] EU->n_SZJA [label = \"-0.77\"] EU->n_HO_FORG_RB [label = \"1\"] EU->n_HO_FORG_OSSZ [label = \"1\"] EU->FGYHO_SZOLG_SZAM [label = \"0.64\"] EU->HO_SZOLG_SZAM [label = \"0.68\"] EU->HO_APOLO_SZAM [label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+``` r
+knitr::include_graphics("tdk_files/figure-gfm/semplot.png")
+```
+
+<img src="tdk_files/figure-gfm/semplot.png" width="946" />
