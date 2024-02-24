@@ -17,7 +17,7 @@
                 "file": "Canvas.canvas",
                 "viewState": {
                   "x": 96.6150329662536,
-                  "y": -855.6624994703947,
+                  "y": -609.4771336167362,
                   "zoom": -0.14140797820585116
                 }
               },
@@ -27,13 +27,15 @@
           {
             "id": "5264b7fd3600dc6c",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
                 "file": "Adatok.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "pinned": true
             }
           },
           {
@@ -51,29 +53,47 @@
             }
           },
           {
-            "id": "b364bcfa32fc5ed5",
+            "id": "6d530e1ac3775048",
             "type": "leaf",
             "pinned": true,
-            "state": {
-              "type": "graph",
-              "state": {},
-              "pinned": true
-            }
-          },
-          {
-            "id": "a6707b6397b85b40",
-            "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
                 "file": "Laci konzultáció.md",
                 "mode": "source",
                 "source": false
+              },
+              "pinned": true
+            }
+          },
+          {
+            "id": "8f4825a19407b92e",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Források.md",
+                "mode": "source",
+                "source": false
+              },
+              "pinned": true
+            }
+          },
+          {
+            "id": "6c4805589491326e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "P3 konzultáció.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -212,32 +232,35 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "a6707b6397b85b40",
+  "active": "6d530e1ac3775048",
   "lastOpenFiles": [
-    "lu26801z4d.tmp",
-    "lu26801z4a.tmp",
-    "Adatok.md",
-    "tdk.md",
-    "tdk_files/figure-gfm/semplot.png",
-    "Laci konzultáció.md",
-    "lu75742ivow.tmp",
-    "Source/Szigma2022_1_4_Kovacs.pdf",
-    "lu497211w9m.tmp",
-    "Source/2002_04_354.pdf",
-    "Source/nemes_alexandra_CSOK.pdf",
-    "Source/lakaspiaci-jelentes-2022-november-hun.pdf",
-    "Source/Kszemle_CIKK_2091.pdf",
-    "Source/Kszemle_CIKK_1998.pdf",
-    "Source/Kszemle_CIKK_1952.pdf",
-    "Adatábrázolás.md",
-    "Canvas.canvas",
+    "lu135319825b.tmp",
+    "lu55133r13.tmp",
+    "SEMplot.png",
+    "plot.png",
     "Források.md",
+    "lu55133qvx.tmp",
+    "P3 konzultáció.md",
+    "Source/2021_02_115.pdf",
+    "Source/2021_04_333.pdf",
+    "Source/2021_09_844.pdf",
+    "Source/2021_11_1080.pdf",
+    "Source/Szigma2022_1_4_Kovacs.pdf",
+    "Source/Wooldridge - Cross-section and Panel Data.pdf",
+    "Source/2016_K20_020.pdf",
+    "Source/nemes_alexandra_CSOK.pdf",
+    "Laci konzultáció.md",
+    "tdk.md",
+    "Adatok.md",
+    "Canvas.canvas",
+    "Szöveg.md",
+    "README.md",
+    "tdk_files/figure-gfm/semplot.png",
+    "Adatábrázolás.md",
     "GAM.md",
     "Leíró stat.md",
     "Panelmodell.md",
-    "README.md",
     "SEM.md",
-    "Szöveg.md",
     "tdk_files/figure-gfm/Rplot.png",
     "tdk.knit.md",
     "tdk_files/figure-gfm/unnamed-chunk-8-1.png",
@@ -247,7 +270,6 @@
     "tdk_files/figure-gfm/parcialis corrplot-1.png",
     "tdk_files/figure-gfm/unnamed-chunk-6-1.png",
     "tdk_files/figure-gfm/corrplot-2.png",
-    "tdk_files/figure-gfm/corrplot-1.png",
     "tdk_files.md",
     "Leíró.md",
     "2023-07-15.md"

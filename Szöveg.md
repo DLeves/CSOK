@@ -4,7 +4,7 @@
 	- [x] PC1 modell számol
 	- [x] SEM elmagyaráz
 	- [ ] SEM eredmények
-	- [ ] kész sem másik 2 időszakra
+	- [x] kész sem másik 2 időszakra
 - [x] Tesztek p-értékei
 	- [x] Hausmann
 	- [x] Glob F

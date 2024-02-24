@@ -33,7 +33,7 @@
 |HGYO_FORG_OSSZ| Házi gyerekorvosi teljes betegforgalom 10e főre|
 |HGYO_FORG_RB| Házi gyermekorvosi rendelőben megejelentek betegforgalom 10e főre|
 |HGYO_FORG_RK|Házi gyermekorvosi rendelőn kívüli betegforgalom 10e főre|
-|HO_FORG_RB|Háziorvosi rendelőn kívüli betegforgalom 10e főre|
+|HO_FORG_RB|Háziorvosi rendelőn belüli betegforgalom 10e főre |
 |HO_FORG_RK|Háziorvosi rendelőn kívüli betegforgalom 10e főre|
 |VEDONO| Védőnői dolgozók betöltött állásainak száma 10e főre|
 

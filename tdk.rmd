@@ -25,6 +25,7 @@ library(ppcor)
 library(corrplot)
 library(lavaan)
 library(lavaanPlot)
+library(DiagrammeRsvg)
 library(car)
 ```
 
@@ -541,29 +542,31 @@ vartable(fit)
 
 ```{r}
 
-df2012$n_LAKAS_PRED = scale(df2012$LAKAS_PRED)
-df2012$n_HO_FORG_RB = scale(df2012$HO_FORG_RB)
-df2012$n_HO_FORG_OSSZ = scale(df2012$HO_FORG_OSSZ)
-df2012$n_SZJA = scale(df2012$SZJA)
-df2012$n_BERUHAZAS = scale(df2012$BERUHAZAS)
+# df2012$LAKAS_PRED = scale(df2012$LAKAS_PRED)
+# df2012$n_HO_FORG_RB = scale(df2012$HO_FORG_RB)
+# df2012$n_HO_FORG_OSSZ = scale(df2012$HO_FORG_OSSZ)
+# df2012$n_SZJA = scale(df2012$SZJA)
+# df2012$n_BERUHAZAS = scale(df2012$BERUHAZAS)
+
+n_df2012 = scale((select_if(df2012[,-81], is.numeric)))
 
 sem = "
   # measurement model
-    EU =~ VEDONO + n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
+    EU =~ VEDONO + HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM + HGYO_SZAM
   # regressions
-    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
-    ATLAGAR ~ n_SZJA + EU
-    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+    LAKAS_PRED ~ SZJA + BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
   # residual correlations
-    VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + n_HO_FORG_OSSZ + n_HO_FORG_RB
-    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
-    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    VEDONO ~~ HO_APOLO_SZAM + HO_SZAM + HO_FORG_OSSZ + HO_FORG_RB
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
     FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
     HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
     HO_APOLO_SZAM ~~ HGYO_SZAM
 "
 
-fit = sem(sem, data = df2012)
+fit = sem(sem, data = n_df2012)
 summary(fit, standardized = T)
 ```
 
@@ -571,85 +574,148 @@ summary(fit, standardized = T)
 lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
 ```
 
- ## Csak PC1-es latensvaltozoval
+## Csak PC1-es latensvaltozoval
+
+### 2012
 ```{r}
 sem = "
   # measurement model
-    EU =~ n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+    EU =~ HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
   # regressions
-    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
-    ATLAGAR ~ n_SZJA + EU
-    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+    LAKAS_PRED ~ SZJA + BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
   # residual correlations
-    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
-    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
     FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
     HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
     HO_APOLO_SZAM ~~ HGYO_SZAM
 "
 
-fit = sem(sem, data = df2012)
-summary(fit, standardized = T)
+fit = sem(sem, data = n_df2012)
+summary(fit, standardized = T, fit.measures = T)
 ```
 
 
 ```{r}
 lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
-knitr::include_graphics("tdk_files/figure-gfm/semplot.png")
+# knitr::include_graphics("tdk_files/figure-gfm/semplot.png")
 ```
 
-## 2016-os adatokon
+### 2016-os adatokon
 
 ```{r}
-df2016$n_LAKAS_PRED = scale(df2016$LAKAS_PRED)
-df2016$n_HO_FORG_RB = scale(df2016$HO_FORG_RB)
-df2016$n_HO_FORG_OSSZ = scale(df2016$HO_FORG_OSSZ)
-df2016$n_SZJA = scale(df2016$SZJA)
-df2016$n_BERUHAZAS = scale(df2016$BERUHAZAS)
+# df2016$n_LAKAS_PRED = scale(df2016$LAKAS_PRED)
+# df2016$n_HO_FORG_RB = scale(df2016$HO_FORG_RB)
+# df2016$n_HO_FORG_OSSZ = scale(df2016$HO_FORG_OSSZ)
+# df2016$n_SZJA = scale(df2016$SZJA)
+# df2016$n_BERUHAZAS = scale(df2016$BERUHAZAS)
+
+n_df2016 = scale((select_if(df2016[,-81], is.numeric)))
 
 sem = "
   # measurement model
-    EU =~ n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+    EU =~ HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
   # regressions
-    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
-    ATLAGAR ~ n_SZJA + EU
-    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+    LAKAS_PRED ~ SZJA + BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
   # residual correlations
-    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
-    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
     FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
     HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
     HO_APOLO_SZAM ~~ HGYO_SZAM
 "
 
-fit = sem(sem, data = df2016)
-summary(fit, standardized = T)
+fit = sem(sem, data = n_df2016)
+summary(fit, standardized = T, fit.measures = T)
 ```
 
-## 2019-es adatokon
 
 ```{r}
-df2019$n_LAKAS_PRED = scale(df2019$LAKAS_PRED)
-df2019$n_HO_FORG_RB = scale(df2019$HO_FORG_RB)
-df2019$n_HO_FORG_OSSZ = scale(df2019$HO_FORG_OSSZ)
-df2019$n_SZJA = scale(df2019$SZJA)
-df2019$n_BERUHAZAS = scale(df2019$BERUHAZAS)
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+save_png(lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T), "SEMplot.png")
+```
+
+### 2019-es adatokon
+
+```{r}
+# df2019$LAKAS_PRED = scale(df2019$LAKAS_PRED)
+# df2019$HO_FORG_RB = scale(df2019$HO_FORG_RB)
+# df2019$HO_FORG_OSSZ = scale(df2019$HO_FORG_OSSZ)
+# df2019$SZJA = scale(df2019$SZJA)
+# df2019$BERUHAZAS = scale(df2019$BERUHAZAS)
+
+n_df2019 = scale((select_if(df2019[,-81], is.numeric)))
 
 sem = "
   # measurement model
-    EU =~ n_HO_FORG_RB + n_HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+    EU =~ HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
   # regressions
-    n_LAKAS_PRED ~ n_SZJA + n_BERUHAZAS + MUNKA + ATLAGAR + EU
-    ATLAGAR ~ n_SZJA + EU
-    n_SZJA ~ MUNKA + n_BERUHAZAS + EU
+    LAKAS_PRED ~ SZJA + BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
   # residual correlations
-    n_HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + n_HO_FORG_OSSZ 
-    n_HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
     FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
     HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
     HO_APOLO_SZAM ~~ HGYO_SZAM
 "
 
-fit = sem(sem, data = df2019)
-summary(fit, standardized = T)
+fit = sem(sem, data = n_df2019)
+summary(fit, standardized = T, fit.measures = T)
+# summary(fit, fit.measures = T)
 ```
+
+### Összes adaton
+
+```{r}
+n_df = scale((select_if(df2[,-81], is.numeric)))
+
+sem = "
+  # measurement model
+    EU =~ HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+  # regressions
+    LAKAS_PRED ~ SZJA + BERUHAZAS + MUNKA + ATLAGAR + EU
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
+  # residual correlations
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = n_df)
+summary(fit, fit.measures = T)
+```
+
+### Próbálgatás
+```{r}
+n_df2018 = scale((select_if(df2018[,-81], is.numeric)))
+
+sem = "
+  # measurement model
+    EU =~ HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+  # regressions
+    LAKAS_PRED ~ SZJA + SERTETT + ATLAGAR + EU + BERUHAZAS + MUNKA
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
+  # residual correlations
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = n_df2018)
+summary(fit, standardized = T, fit.measures = T)
+
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+```
+
