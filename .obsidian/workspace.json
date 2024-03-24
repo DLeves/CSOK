@@ -81,14 +81,12 @@
             }
           },
           {
-            "id": "6c4805589491326e",
+            "id": "689e518a4cb47580",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "pdf",
               "state": {
-                "file": "P3 konzultáció.md",
-                "mode": "source",
-                "source": false
+                "file": "Source/2021_11_1080.pdf"
               }
             }
           }
@@ -143,7 +141,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "200cb6da99aa2ee7",
@@ -234,25 +233,30 @@
   },
   "active": "6d530e1ac3775048",
   "lastOpenFiles": [
-    "lu135319825b.tmp",
-    "lu55133r13.tmp",
+    "Adatok.md",
+    "tdk_files/figure-gfm/mapplot.png",
+    "tdk_files/figure-gfm/lu94022btc6.tmp",
+    "tdk_files/figure-gfm/finalcorrplot.png",
+    "tdk_files/figure-gfm/trendline (1).png",
+    "tdk_files/figure-gfm/trendline.png",
+    "Source/2021_11_1080.pdf",
+    "Források.md",
+    "2024-03-15.md",
+    "Source/references.bib",
+    "Source/citatioons.bib",
+    "Source/My first project.bib",
+    "Source/lakaspiaci-jelentes-2022-november-hun.pdf",
+    "Source/2009_10-11_1038.pdf",
+    "Source/AZ9BGI_Projekt2 (2).pdf",
+    "Source/2021_02_115.pdf",
+    "Source/2002_04_354.pdf",
+    "tdk.md",
+    "Laci konzultáció.md",
+    "Canvas.canvas",
+    "P3 konzultáció.md",
+    "Pesto di Pomodoro Secchi.md",
     "SEMplot.png",
     "plot.png",
-    "Források.md",
-    "lu55133qvx.tmp",
-    "P3 konzultáció.md",
-    "Source/2021_02_115.pdf",
-    "Source/2021_04_333.pdf",
-    "Source/2021_09_844.pdf",
-    "Source/2021_11_1080.pdf",
-    "Source/Szigma2022_1_4_Kovacs.pdf",
-    "Source/Wooldridge - Cross-section and Panel Data.pdf",
-    "Source/2016_K20_020.pdf",
-    "Source/nemes_alexandra_CSOK.pdf",
-    "Laci konzultáció.md",
-    "tdk.md",
-    "Adatok.md",
-    "Canvas.canvas",
     "Szöveg.md",
     "README.md",
     "tdk_files/figure-gfm/semplot.png",
@@ -266,10 +270,6 @@
     "tdk_files/figure-gfm/unnamed-chunk-8-1.png",
     "tdk_files/figure-gfm/unnamed-chunk-7-1.png",
     "Untitled.canvas",
-    "tdk_files/figure-gfm/unnamed-chunk-5-1.png",
-    "tdk_files/figure-gfm/parcialis corrplot-1.png",
-    "tdk_files/figure-gfm/unnamed-chunk-6-1.png",
-    "tdk_files/figure-gfm/corrplot-2.png",
     "tdk_files.md",
     "Leíró.md",
     "2023-07-15.md"

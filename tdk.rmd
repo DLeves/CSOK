@@ -1,8 +1,9 @@
 ---
 title: "CSOK TDK"
 output: 
-  github_document:
+  html_document:
     toc: true
+    toc_float: true  
 always_allow_html: true
 ---
 
@@ -214,6 +215,36 @@ describe(df2021$LAKAS)
 psych::describe(df2021$ATLAGAR)
 ```
 
+```{r}
+sumtrend = df %>%
+  group_by(EV) %>%
+  summarise(sum = sum(LAKAS, na.rm = T)/175)
+
+balaton = df %>%
+  group_by(EV) %>%
+  filter(JARAS_NEV == "Siófoki")
+
+gyor = df %>%
+  group_by(EV) %>%
+  filter(JARAS_NEV == "Győri")
+
+bp = df %>%
+  group_by(EV) %>%
+  filter(JARAS_NEV == "Érdi")
+
+trendplotdf = data.frame(EV = as.Date(paste(as.character(sumtrend$EV),"1","1",sep = "-")), TREND = sumtrend$sum, BALATON = balaton$LAKAS, GYOR = gyor$LAKAS, BP = bp$LAKAS)
+rm(sumtrend, balaton, gyor, bp)
+
+ggplot(trendplotdf, aes(EV))+
+  geom_line(aes(y = TREND, color = "Átlag"))+
+  geom_line(aes(y = BALATON, color = "Siófoki járás"))+
+  geom_line(aes(y = GYOR, color = "Győri járás"))+
+  geom_line(aes(y = BP, color = "Érdi járás"))+
+  labs(x = "Év", y = "Lakásépítések tízezer lakosra(db)")+
+  theme_minimal()+
+  theme(legend.title = element_blank())
+```
+
 
 ## Korrelációk
 
@@ -283,7 +314,7 @@ Mik lehetnek az egyes főkomponensek?
 ### Korr mtx a főkompokkal együtt
 
 ```{r}
-corrplot(cor(df[,c(4:8,14:16,19,38:40)], use = "complete.obs"), method = "color", addCoef.col = "darkolivegreen")
+corrplot(cor(df[,c(4:8,14:16,19,38:40)], use = "complete.obs"), method = "color")
 ```
 
 

@@ -7,36 +7,40 @@
 - [x] GAM képlet legyen? --> általános felírása, konyhanyelven elmesél
 - [ ] Területi panel képlet legyen? --> adatokra átfordított képlet: nulladik modell és a szűkített modell
 	- [ ] nulladik modell
-	- [ ] szűkített modell
+	- [ ] szűkített modell -> ezt részletesen
 - [x] Módszertanba dinamikus panel is kifejt
 - [ ] SEM képpel is gondolom legyen benne, de melyik év? 2019? --> ahol a legtöbb szign kapcs van, többi mellékletbe
 	- [ ] 2016 a legszignifikánsabb magyarázó változó tekintetében
 	- [ ] RMSEA-t meg kell még nézni -> mindegyik 0,1 felett van
+		- [ ] kis elemszam miatt lehet, de konf intervall benne van
+		- [ ] megfigyelt kapcsolatok szignifikanciájára kell figyelni
+		- [ ] Nem a legjobb az illeszkedés, de ez van
 		- [ ] Itt is még legyen modellszelekció?
-	- [ ] summary()-ban standardized?
 - [ ] Absztrakt megír
 - [ ] Fix hatások megnéz, picit ír róla
-- [ ] Melyik kategóriában induljak?
-	- [ ] 18. Föci
-	- [ ] 52. Statisztika és ökonometria
-	- [ ] közgazd közpol / szoc
+- [x] Melyik kategóriában induljak?
+	- [x] 18. Föci
+	- [x] 52. Statisztika és ökonometria
+	- [x] közgazd közpol / szoc
 - [ ] Szakirodalmi források ismertetése
 	- [ ] Hogyan hivatkozzak egyes részeket?
 - [x] Panelmodellekhez hivatkozás keresés
 - [ ] R csomagok hivatkozása?
+	- [ ] R-t talán nem, de a csomagokat elegáns
+		- [ ] citation() fv R-ben
 - [ ] SEM ábra rajzol?
+	- [ ] érdemes lehet megpróbálni
 - [ ] Kell még külföldi hivatkozás
+	- [ ] Moranékat még a területi autokorrnál
 - [x] az egész SEM-es adatokat lenormalizál
 - [ ] Jó ahogy hivatkoztam a változókra?
-
+- [ ] Bev végére rövid összefogalása a kövi fejezeteknek holisztikusan
+- [ ] Fejezetek számozása
+- [ ] Egységesen lenn az ábránál a felirat(cím, forrás)
+- [ ] Alkalmozott módszerek, Felhasznált adatok szétszed
+- [ ] SEM ábrán a jelölések
+- [ ] cfi tli SEMben
 
 
 1. Amikor a panelmodell képletét leírom, akkor azt az eredmény részbe tegyem? Picit értekezem a módszertannál arról, hogy milyen panelmodellek vannak és esetleg oda is lehetne azokra az általános egyeneltet leírni.
-2. A SEM-nél beleteszem a legjobban szignifikáns SEM-ről a képet és oda fel is írjam az egyenleteket?
-3. SEM-nél a képet ne próbáljam meg megszerkeszteni inkább úgy, hogy jobban érthető legyen? Most eléggé béna
 
-
-
-Árfolyamos tdk ötletek:
-- Marcis cikk címek
-- Marcis cikk leszed, hangulatelemzés --> minden szereplőre több változó lesz

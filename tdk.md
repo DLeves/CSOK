@@ -31,6 +31,7 @@ CSOK TDK
     - [2016-os adatokon](#2016-os-adatokon)
     - [2019-es adatokon](#2019-es-adatokon)
     - [Összes adaton](#összes-adaton)
+    - [Próbálgatás](#próbálgatás)
 
 # Kezdő beállítások
 
@@ -1348,8 +1349,8 @@ lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica
 
     ## PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
 
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3a10172c45224a5dc17b" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-3a10172c45224a5dc17b">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n SZJA; BERUHAZAS; MUNKA; ATLAGAR; LAKAS_PRED; VEDONO; HO_FORG_RB; HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM; HGYO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n SZJA->LAKAS_PRED [label = \"-0.23\"] BERUHAZAS->LAKAS_PRED [label = \"0.15\"] MUNKA->LAKAS_PRED [label = \"-0.05\"] ATLAGAR->LAKAS_PRED [label = \"0.73\"] EU->LAKAS_PRED [label = \"-1.44\"] SZJA->ATLAGAR [label = \"0.3\"] EU->ATLAGAR [label = \"-4.01\"] MUNKA->SZJA [label = \"0.28\"] BERUHAZAS->SZJA [label = \"0.11\"] EU->SZJA [label = \"-3.8\"] EU->VEDONO [label = \"1\"] EU->HO_FORG_RB [label = \"5.26\"] EU->HO_FORG_OSSZ [label = \"5.25\"] EU->FGYHO_SZOLG_SZAM [label = \"3.52\"] EU->HO_SZOLG_SZAM [label = \"3.94\"] EU->HO_APOLO_SZAM [label = \"3.5\"] EU->HGYO_SZAM [label = \"-2.75\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-0cc4cae27b8733dca7f3" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-0cc4cae27b8733dca7f3">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n SZJA; BERUHAZAS; MUNKA; ATLAGAR; LAKAS_PRED; VEDONO; HO_FORG_RB; HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM; HGYO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n SZJA->LAKAS_PRED [label = \"-0.23\"] BERUHAZAS->LAKAS_PRED [label = \"0.15\"] MUNKA->LAKAS_PRED [label = \"-0.05\"] ATLAGAR->LAKAS_PRED [label = \"0.73\"] EU->LAKAS_PRED [label = \"-1.44\"] SZJA->ATLAGAR [label = \"0.3\"] EU->ATLAGAR [label = \"-4.01\"] MUNKA->SZJA [label = \"0.28\"] BERUHAZAS->SZJA [label = \"0.11\"] EU->SZJA [label = \"-3.8\"] EU->VEDONO [label = \"1\"] EU->HO_FORG_RB [label = \"5.26\"] EU->HO_FORG_OSSZ [label = \"5.25\"] EU->FGYHO_SZOLG_SZAM [label = \"3.52\"] EU->HO_SZOLG_SZAM [label = \"3.94\"] EU->HO_APOLO_SZAM [label = \"3.5\"] EU->HGYO_SZAM [label = \"-2.75\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ## Csak PC1-es latensvaltozoval
 
@@ -1492,8 +1493,8 @@ summary(fit, standardized = T, fit.measures = T)
 lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
 ```
 
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2330d51f51676fd29ec8" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-2330d51f51676fd29ec8">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n SZJA; BERUHAZAS; MUNKA; ATLAGAR; LAKAS_PRED; HO_FORG_RB; HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n SZJA->LAKAS_PRED [label = \"-0.2\"] BERUHAZAS->LAKAS_PRED [label = \"0.15\"] MUNKA->LAKAS_PRED [label = \"-0.04\"] ATLAGAR->LAKAS_PRED [label = \"0.72\"] EU->LAKAS_PRED [label = \"-0.32\"] SZJA->ATLAGAR [label = \"0.36\"] EU->ATLAGAR [label = \"-0.86\"] MUNKA->SZJA [label = \"0.34\"] BERUHAZAS->SZJA [label = \"0.09\"] EU->SZJA [label = \"-0.77\"] EU->HO_FORG_RB [label = \"1\"] EU->HO_FORG_OSSZ [label = \"1\"] EU->FGYHO_SZOLG_SZAM [label = \"0.42\"] EU->HO_SZOLG_SZAM [label = \"0.79\"] EU->HO_APOLO_SZAM [label = \"0.64\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2bfd62f006dfe7fb4803" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-2bfd62f006dfe7fb4803">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n SZJA; BERUHAZAS; MUNKA; ATLAGAR; LAKAS_PRED; HO_FORG_RB; HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n SZJA->LAKAS_PRED [label = \"-0.2\"] BERUHAZAS->LAKAS_PRED [label = \"0.15\"] MUNKA->LAKAS_PRED [label = \"-0.04\"] ATLAGAR->LAKAS_PRED [label = \"0.72\"] EU->LAKAS_PRED [label = \"-0.32\"] SZJA->ATLAGAR [label = \"0.36\"] EU->ATLAGAR [label = \"-0.86\"] MUNKA->SZJA [label = \"0.34\"] BERUHAZAS->SZJA [label = \"0.09\"] EU->SZJA [label = \"-0.77\"] EU->HO_FORG_RB [label = \"1\"] EU->HO_FORG_OSSZ [label = \"1\"] EU->FGYHO_SZOLG_SZAM [label = \"0.42\"] EU->HO_SZOLG_SZAM [label = \"0.79\"] EU->HO_APOLO_SZAM [label = \"0.64\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ``` r
 # knitr::include_graphics("tdk_files/figure-gfm/semplot.png")
@@ -1646,8 +1647,8 @@ summary(fit, standardized = T, fit.measures = T)
 lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
 ```
 
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6275e5232fd2a515d1f0" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-6275e5232fd2a515d1f0">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n SZJA; BERUHAZAS; MUNKA; ATLAGAR; LAKAS_PRED; HO_FORG_RB; HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n SZJA->LAKAS_PRED [label = \"-0.26\"] BERUHAZAS->LAKAS_PRED [label = \"0.18\"] MUNKA->LAKAS_PRED [label = \"0.07\"] ATLAGAR->LAKAS_PRED [label = \"0.45\"] EU->LAKAS_PRED [label = \"-0.47\"] SZJA->ATLAGAR [label = \"0.33\"] EU->ATLAGAR [label = \"-0.73\"] MUNKA->SZJA [label = \"0.2\"] BERUHAZAS->SZJA [label = \"0.31\"] EU->SZJA [label = \"-0.63\"] EU->HO_FORG_RB [label = \"1\"] EU->HO_FORG_OSSZ [label = \"1\"] EU->FGYHO_SZOLG_SZAM [label = \"0.48\"] EU->HO_SZOLG_SZAM [label = \"0.82\"] EU->HO_APOLO_SZAM [label = \"0.72\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-de254614659354d9da34" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-de254614659354d9da34">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n SZJA; BERUHAZAS; MUNKA; ATLAGAR; LAKAS_PRED; HO_FORG_RB; HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n SZJA->LAKAS_PRED [label = \"-0.26\"] BERUHAZAS->LAKAS_PRED [label = \"0.18\"] MUNKA->LAKAS_PRED [label = \"0.07\"] ATLAGAR->LAKAS_PRED [label = \"0.45\"] EU->LAKAS_PRED [label = \"-0.47\"] SZJA->ATLAGAR [label = \"0.33\"] EU->ATLAGAR [label = \"-0.73\"] MUNKA->SZJA [label = \"0.2\"] BERUHAZAS->SZJA [label = \"0.31\"] EU->SZJA [label = \"-0.63\"] EU->HO_FORG_RB [label = \"1\"] EU->HO_FORG_OSSZ [label = \"1\"] EU->FGYHO_SZOLG_SZAM [label = \"0.48\"] EU->HO_SZOLG_SZAM [label = \"0.82\"] EU->HO_APOLO_SZAM [label = \"0.72\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ``` r
 save_png(lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T), "SEMplot.png")
@@ -1936,3 +1937,148 @@ summary(fit, fit.measures = T)
     ##    .SZJA              0.223    0.008   26.386    0.000
     ##     HGYO_SZAM         0.999    0.034   29.580    0.000
     ##     EU                0.451    0.034   13.160    0.000
+
+### Próbálgatás
+
+``` r
+n_df2018 = scale((select_if(df2018[,-81], is.numeric)))
+
+sem = "
+  # measurement model
+    EU =~ HO_FORG_RB + HO_FORG_OSSZ + FGYHO_SZOLG_SZAM + HO_SZOLG_SZAM + HO_APOLO_SZAM
+  # regressions
+    LAKAS_PRED ~ SZJA + SERTETT + ATLAGAR + EU + BERUHAZAS + MUNKA
+    ATLAGAR ~ SZJA + EU
+    SZJA ~ MUNKA + BERUHAZAS + EU
+  # residual correlations
+    HO_FORG_RB ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM + HO_FORG_OSSZ 
+    HO_FORG_OSSZ ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM + FGYHO_SZOLG_SZAM
+    FGYHO_SZOLG_SZAM ~~ HGYO_SZAM + HO_APOLO_SZAM + HO_SZOLG_SZAM
+    HO_SZOLG_SZAM ~~ HO_APOLO_SZAM + HGYO_SZAM
+    HO_APOLO_SZAM ~~ HGYO_SZAM
+"
+
+fit = sem(sem, data = n_df2018)
+summary(fit, standardized = T, fit.measures = T)
+```
+
+    ## lavaan 0.6.16 ended normally after 103 iterations
+    ## 
+    ##   Estimator                                         ML
+    ##   Optimization method                           NLMINB
+    ##   Number of model parameters                        40
+    ## 
+    ##   Number of observations                           175
+    ## 
+    ## Model Test User Model:
+    ##                                                       
+    ##   Test statistic                                91.118
+    ##   Degrees of freedom                                32
+    ##   P-value (Chi-square)                           0.000
+    ## 
+    ## Model Test Baseline Model:
+    ## 
+    ##   Test statistic                              2201.536
+    ##   Degrees of freedom                                63
+    ##   P-value                                        0.000
+    ## 
+    ## User Model versus Baseline Model:
+    ## 
+    ##   Comparative Fit Index (CFI)                    0.972
+    ##   Tucker-Lewis Index (TLI)                       0.946
+    ## 
+    ## Loglikelihood and Information Criteria:
+    ## 
+    ##   Loglikelihood user model (H0)              -1175.106
+    ##   Loglikelihood unrestricted model (H1)      -1129.547
+    ##                                                       
+    ##   Akaike (AIC)                                2430.213
+    ##   Bayesian (BIC)                              2556.804
+    ##   Sample-size adjusted Bayesian (SABIC)       2430.137
+    ## 
+    ## Root Mean Square Error of Approximation:
+    ## 
+    ##   RMSEA                                          0.103
+    ##   90 Percent confidence interval - lower         0.078
+    ##   90 Percent confidence interval - upper         0.128
+    ##   P-value H_0: RMSEA <= 0.050                    0.000
+    ##   P-value H_0: RMSEA >= 0.080                    0.938
+    ## 
+    ## Standardized Root Mean Square Residual:
+    ## 
+    ##   SRMR                                           0.175
+    ## 
+    ## Parameter Estimates:
+    ## 
+    ##   Standard errors                             Standard
+    ##   Information                                 Expected
+    ##   Information saturated (h1) model          Structured
+    ## 
+    ## Latent Variables:
+    ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##   EU =~                                                                 
+    ##     HO_FORG_RB        1.000                               0.816    0.860
+    ##     HO_FORG_OSSZ      1.000    0.006  155.799    0.000    0.816    0.860
+    ##     FGYHO_SZOLG_SZ    0.555    0.069    8.023    0.000    0.453    0.481
+    ##     HO_SZOLG_SZAM     0.851    0.072   11.838    0.000    0.694    0.699
+    ##     HO_APOLO_SZAM     0.816    0.074   10.981    0.000    0.666    0.674
+    ## 
+    ## Regressions:
+    ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##   LAKAS_PRED ~                                                          
+    ##     SZJA             -0.241    0.075   -3.229    0.001   -0.241   -0.217
+    ##     SERTETT           0.059    0.044    1.346    0.178    0.059    0.058
+    ##     ATLAGAR           0.788    0.146    5.399    0.000    0.788    0.755
+    ##     EU               -0.290    0.207   -1.402    0.161   -0.237   -0.235
+    ##     BERUHAZAS         0.035    0.046    0.751    0.452    0.035    0.034
+    ##     MUNKA            -0.012    0.051   -0.228    0.820   -0.012   -0.012
+    ##   ATLAGAR ~                                                             
+    ##     SZJA              0.228    0.110    2.071    0.038    0.228    0.214
+    ##     EU               -0.860    0.189   -4.537    0.000   -0.701   -0.726
+    ##   SZJA ~                                                                
+    ##     MUNKA             0.303    0.052    5.872    0.000    0.303    0.333
+    ##     BERUHAZAS         0.189    0.051    3.699    0.000    0.189    0.208
+    ##     EU               -0.652    0.106   -6.144    0.000   -0.532   -0.587
+    ## 
+    ## Covariances:
+    ##                       Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##  .HO_FORG_RB ~~                                                            
+    ##     HGYO_SZAM           -0.198    0.050   -3.968    0.000   -0.198   -0.409
+    ##    .HO_APOLO_SZAM        0.116    0.083    1.397    0.162    0.116    0.329
+    ##    .HO_SZOLG_SZAM        0.116    0.085    1.359    0.174    0.116    0.338
+    ##    .FGYHO_SZOLG_SZ       0.221    0.068    3.232    0.001    0.221    0.553
+    ##    .HO_FORG_OSSZ         0.233    0.096    2.411    0.016    0.233    0.992
+    ##  .HO_FORG_OSSZ ~~                                                          
+    ##     HGYO_SZAM           -0.199    0.050   -3.994    0.000   -0.199   -0.412
+    ##    .HO_APOLO_SZAM        0.115    0.083    1.383    0.167    0.115    0.326
+    ##    .HO_SZOLG_SZAM        0.114    0.085    1.335    0.182    0.114    0.332
+    ##    .FGYHO_SZOLG_SZ       0.222    0.068    3.249    0.001    0.222    0.556
+    ##  .FGYHO_SZOLG_SZAM ~~                                                      
+    ##     HGYO_SZAM           -0.405    0.071   -5.672    0.000   -0.405   -0.492
+    ##    .HO_APOLO_SZAM        0.251    0.071    3.552    0.000    0.251    0.417
+    ##    .HO_SZOLG_SZAM        0.328    0.074    4.454    0.000    0.328    0.559
+    ##  .HO_SZOLG_SZAM ~~                                                         
+    ##    .HO_APOLO_SZAM        0.329    0.085    3.866    0.000    0.329    0.636
+    ##     HGYO_SZAM           -0.020    0.059   -0.330    0.742   -0.020   -0.028
+    ##  .HO_APOLO_SZAM ~~                                                         
+    ##     HGYO_SZAM           -0.050    0.060   -0.834    0.404   -0.050   -0.069
+    ## 
+    ## Variances:
+    ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    ##    .HO_FORG_RB        0.235    0.097    2.429    0.015    0.235    0.260
+    ##    .HO_FORG_OSSZ      0.234    0.097    2.428    0.015    0.234    0.260
+    ##    .FGYHO_SZOLG_SZ    0.682    0.084    8.145    0.000    0.682    0.769
+    ##    .HO_SZOLG_SZAM     0.505    0.093    5.414    0.000    0.505    0.511
+    ##    .HO_APOLO_SZAM     0.532    0.091    5.823    0.000    0.532    0.545
+    ##    .LAKAS_PRED        0.296    0.034    8.689    0.000    0.296    0.291
+    ##    .ATLAGAR           0.228    0.072    3.163    0.002    0.228    0.245
+    ##    .SZJA              0.383    0.057    6.765    0.000    0.383    0.466
+    ##     HGYO_SZAM         0.994    0.106    9.354    0.000    0.994    1.000
+    ##     EU                0.666    0.129    5.170    0.000    1.000    1.000
+
+``` r
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+```
+
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-064ca90144334afbcb1c" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-064ca90144334afbcb1c">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box, fontname = Helvetica ] \n node [shape = box] \n SZJA; SERTETT; ATLAGAR; BERUHAZAS; MUNKA; LAKAS_PRED; HO_FORG_RB; HO_FORG_OSSZ; FGYHO_SZOLG_SZAM; HO_SZOLG_SZAM; HO_APOLO_SZAM \n node [shape = oval] \n EU \n \n edge [ color = grey ] \n SZJA->LAKAS_PRED [label = \"-0.24\"] SERTETT->LAKAS_PRED [label = \"0.06\"] ATLAGAR->LAKAS_PRED [label = \"0.79\"] EU->LAKAS_PRED [label = \"-0.29\"] BERUHAZAS->LAKAS_PRED [label = \"0.03\"] MUNKA->LAKAS_PRED [label = \"-0.01\"] SZJA->ATLAGAR [label = \"0.23\"] EU->ATLAGAR [label = \"-0.86\"] MUNKA->SZJA [label = \"0.3\"] BERUHAZAS->SZJA [label = \"0.19\"] EU->SZJA [label = \"-0.65\"] EU->HO_FORG_RB [label = \"1\"] EU->HO_FORG_OSSZ [label = \"1\"] EU->FGYHO_SZOLG_SZAM [label = \"0.56\"] EU->HO_SZOLG_SZAM [label = \"0.85\"] EU->HO_APOLO_SZAM [label = \"0.82\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
