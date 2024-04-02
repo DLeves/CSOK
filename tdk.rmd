@@ -748,5 +748,13 @@ fit = sem(sem, data = n_df2018)
 summary(fit, standardized = T, fit.measures = T)
 
 lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T)
+
+save_png(lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T), "SEMplot.png")
+```
+
+```{r}
+lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T, stars  = c("regress"))
+
+save_png(lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey"), coefs = T, stars  = c("regress")), "SEMplot_sign.png")
 ```
 
